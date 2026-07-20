@@ -27,7 +27,7 @@
     "lucide-react": "^1.25.0",
     "mammoth": "^1.12.0",
     "multer": "^2.2.0",
-    "pdf-parse": "^2.4.5",
+    "pdfreader": "^3.0.8",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-markdown": "^10.1.0",
