@@ -3,6 +3,7 @@ import LegalAdvisor from './pages/LegalAdvisor'
 import DocumentScanner from './pages/DocumentScanner'
 import FIRGenerator from './pages/FIRGenerator'
 import LegalNotice from './pages/LegalNotice'
+import CaseFinder from './pages/CaseFinder'
 
 function Navbar() {
   return (
@@ -23,13 +24,13 @@ function Navbar() {
       <Link to="/" style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--color-gold)', textDecoration: 'none', letterSpacing: '0.1em' }}>
         LEXA
       </Link>
-      <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
-        <Link to="/advisor" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none', fontSize: '0.95rem' }}>Legal Advice</Link>
-        <Link to="/scanner" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none', fontSize: '0.95rem' }}>Document Scan</Link>
-        <Link to="/fir" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none', fontSize: '0.95rem' }}>FIR Generator</Link>
-        <Link to="/notice" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none', fontSize: '0.95rem' }}>Legal Notice</Link>
-        <Link to="/judgments" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none', fontSize: '0.95rem' }}>Judgments</Link>
-        <Link to="/" style={{ color: 'var(--color-text-primary)', textDecoration: 'none', fontSize: '0.95rem', border: '1px solid var(--color-border)', padding: '0.4rem 1rem', borderRadius: '6px' }}>Sign In</Link>
+      <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+        <Link to="/advisor" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>Legal Advice</Link>
+        <Link to="/scanner" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>Document Scan</Link>
+        <Link to="/fir" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>FIR Generator</Link>
+        <Link to="/notice" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>Legal Notice</Link>
+        <Link to="/judgments" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>Case Finder</Link>
+        <Link to="/" style={{ color: 'var(--color-text-primary)', textDecoration: 'none', fontSize: '0.9rem', border: '1px solid var(--color-border)', padding: '0.4rem 1rem', borderRadius: '6px' }}>Sign In</Link>
       </div>
     </nav>
   )
@@ -57,6 +58,9 @@ function Home() {
         <Link to="/notice" style={{ background: 'transparent', color: 'var(--color-text-primary)', padding: '0.875rem 2rem', borderRadius: '8px', textDecoration: 'none', fontWeight: '600', fontSize: '1rem', border: '1px solid var(--color-border)' }}>
           Legal Notice
         </Link>
+        <Link to="/judgments" style={{ background: 'transparent', color: 'var(--color-text-primary)', padding: '0.875rem 2rem', borderRadius: '8px', textDecoration: 'none', fontWeight: '600', fontSize: '1rem', border: '1px solid var(--color-border)' }}>
+          Find Cases
+        </Link>
       </div>
     </div>
   )
@@ -72,6 +76,7 @@ export default function App() {
         <Route path="/scanner" element={<DocumentScanner />} />
         <Route path="/fir" element={<FIRGenerator />} />
         <Route path="/notice" element={<LegalNotice />} />
+        <Route path="/judgments" element={<CaseFinder />} />
       </Routes>
     </BrowserRouter>
   )

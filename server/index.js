@@ -7,6 +7,7 @@ import legalRouter from './routes/legal.js'
 import documentRouter from './routes/document.js'
 import firRouter from './routes/fir.js'
 import noticeRouter from './routes/notice.js'
+import judgmentRouter from './routes/judgment.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -28,6 +29,7 @@ app.use('/api/legal', legalRouter)
 app.use('/api/document', documentRouter)
 app.use('/api/fir', firRouter)
 app.use('/api/notice', noticeRouter)
+app.use('/api/judgment', judgmentRouter)
 
 app.use((_req, res) => {
   res.status(404).json({ error: 'Route not found' })
