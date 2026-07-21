@@ -1,8 +1,3 @@
-/**
- * Lexa API Server
- * Express backend for the Indian legal advisor application.
- */
-
 import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
@@ -11,6 +6,7 @@ import { fileURLToPath } from 'url'
 import legalRouter from './routes/legal.js'
 import documentRouter from './routes/document.js'
 import firRouter from './routes/fir.js'
+import noticeRouter from './routes/notice.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -31,6 +27,7 @@ app.get('/api/health', (_req, res) => {
 app.use('/api/legal', legalRouter)
 app.use('/api/document', documentRouter)
 app.use('/api/fir', firRouter)
+app.use('/api/notice', noticeRouter)
 
 app.use((_req, res) => {
   res.status(404).json({ error: 'Route not found' })
