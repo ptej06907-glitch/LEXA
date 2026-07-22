@@ -1,26 +1,16 @@
 import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
+import DOMPurify from 'dompurify'
 
 const NOTICE_TYPES = [
-  'Demand Notice',
-  'Cease and Desist',
-  'Eviction Notice',
-  'Employment Termination',
-  'Consumer Complaint',
-  'Defamation',
-  'Recovery of Money',
-  'Property Dispute',
+  'Demand Notice', 'Cease and Desist', 'Eviction Notice',
+  'Employment Termination', 'Consumer Complaint', 'Defamation',
+  'Recovery of Money', 'Property Dispute',
 ]
 
 const RECIPIENT_TYPES = [
-  'Individual',
-  'Company',
-  'Landlord',
-  'Tenant',
-  'Employer',
-  'Employee',
-  'Bank',
-  'Government Body',
+  'Individual', 'Company', 'Landlord', 'Tenant',
+  'Employer', 'Employee', 'Bank', 'Government Body',
 ]
 
 export default function LegalNotice() {
@@ -77,8 +67,6 @@ export default function LegalNotice() {
       maxWidth: '800px',
       margin: '0 auto',
     }}>
-
-      {/* Header */}
       <div style={{ marginBottom: '2rem' }}>
         <h1 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '0.5rem' }}>
           Legal Notice Generator
@@ -88,7 +76,6 @@ export default function LegalNotice() {
         </p>
       </div>
 
-      {/* Notice Type */}
       <div style={{ marginBottom: '1.5rem' }}>
         <label style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)', letterSpacing: '0.08em', display: 'block', marginBottom: '0.75rem' }}>
           NOTICE TYPE
@@ -117,7 +104,6 @@ export default function LegalNotice() {
         </div>
       </div>
 
-      {/* Recipient Type */}
       <div style={{ marginBottom: '1.5rem' }}>
         <label style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)', letterSpacing: '0.08em', display: 'block', marginBottom: '0.75rem' }}>
           SENDING NOTICE TO
@@ -146,7 +132,6 @@ export default function LegalNotice() {
         </div>
       </div>
 
-      {/* Situation */}
       <div style={{ marginBottom: '1.5rem' }}>
         <label style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)', letterSpacing: '0.08em', display: 'block', marginBottom: '0.5rem' }}>
           DESCRIBE YOUR SITUATION
@@ -177,7 +162,6 @@ export default function LegalNotice() {
         </div>
       </div>
 
-      {/* Error */}
       {error && (
         <div style={{
           background: 'rgba(220, 38, 38, 0.1)',
@@ -192,7 +176,6 @@ export default function LegalNotice() {
         </div>
       )}
 
-      {/* Generate Button */}
       <button
         onClick={handleGenerate}
         disabled={!situation.trim() || loading}
@@ -213,7 +196,6 @@ export default function LegalNotice() {
         {loading ? 'Generating Notice...' : 'Generate Legal Notice'}
       </button>
 
-      {/* Loading */}
       {loading && (
         <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--color-text-secondary)' }}>
           <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>⚖️</div>
@@ -221,7 +203,6 @@ export default function LegalNotice() {
         </div>
       )}
 
-      {/* Notice Result */}
       {notice && (
         <div style={{
           background: 'var(--color-surface)',
@@ -230,9 +211,7 @@ export default function LegalNotice() {
           padding: '2rem',
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', borderBottom: '1px solid var(--color-border)', paddingBottom: '1rem' }}>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: '600', color: 'var(--color-gold)' }}>
-              Legal Notice
-            </h2>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: '600', color: 'var(--color-gold)' }}>Legal Notice</h2>
             <button
               onClick={handleCopy}
               style={{
@@ -249,7 +228,7 @@ export default function LegalNotice() {
             </button>
           </div>
           <div style={{ color: 'var(--color-text-primary)', lineHeight: '1.8', fontSize: '0.95rem' }}>
-            <ReactMarkdown>{notice}</ReactMarkdown>
+            <ReactMarkdown>{DOMPurify.sanitize(notice)}</ReactMarkdown>
           </div>
           <p style={{ marginTop: '1.5rem', fontSize: '0.8rem', color: 'var(--color-text-secondary)', borderTop: '1px solid var(--color-border)', paddingTop: '1rem' }}>
             ⚠️ This is an AI-generated draft. Have a lawyer review before sending. Fill in all blank fields with actual details.

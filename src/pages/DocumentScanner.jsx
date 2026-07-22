@@ -1,11 +1,6 @@
-/**
- * Document Scanner Page
- * Allows users to upload PDF/DOCX legal documents
- * and get AI-powered analysis of red flags and exploits.
- */
-
 import { useState, useRef } from 'react'
 import ReactMarkdown from 'react-markdown'
+import DOMPurify from 'dompurify'
 
 export default function DocumentScanner() {
   const [file, setFile] = useState(null)
@@ -15,7 +10,6 @@ export default function DocumentScanner() {
   const [dragOver, setDragOver] = useState(false)
   const fileInputRef = useRef(null)
 
-  // Handle file selection from input or drag and drop
   const handleFileSelect = (selectedFile) => {
     const allowedTypes = [
       'application/pdf',
@@ -38,7 +32,6 @@ export default function DocumentScanner() {
     setAnalysis('')
   }
 
-  // Handle drag and drop
   const handleDrop = (e) => {
     e.preventDefault()
     setDragOver(false)
@@ -53,7 +46,6 @@ export default function DocumentScanner() {
 
   const handleDragLeave = () => setDragOver(false)
 
-  // Submit file for scanning
   const handleScan = async () => {
     if (!file) {
       setError('Please select a file first')
@@ -65,14 +57,12 @@ export default function DocumentScanner() {
     setAnalysis('')
 
     try {
-      // Use FormData to send file to backend
       const formData = new FormData()
       formData.append('document', file)
 
       const response = await fetch('http://localhost:3001/api/document/scan', {
         method: 'POST',
         body: formData,
-        // Don't set Content-Type header — browser sets it automatically with boundary
       })
 
       const data = await response.json()
@@ -100,17 +90,12 @@ export default function DocumentScanner() {
       margin: '0 auto',
     }}>
 
-      {/* Page Header */}
+      {/* Header */}
       <div style={{ marginBottom: '2rem' }}>
-        <h1 style={{
-          fontSize: '2rem',
-          fontWeight: '700',
-          color: 'var(--color-text-primary)',
-          marginBottom: '0.5rem',
-        }}>
+        <h1 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '0.5rem' }}>
           Document Scanner
         </h1>
-        <p style={{ color: 'var(--color-text-secondary)', fontSize: '1rem' }}>
+        <p style={{ color: 'var(--color-text-secondary)' }}>
           Upload any legal document — contract, agreement, rental deed — and Lexa will find red flags, unfair clauses, and exploits.
         </p>
       </div>
@@ -139,10 +124,7 @@ export default function DocumentScanner() {
           style={{ display: 'none' }}
           onChange={(e) => e.target.files[0] && handleFileSelect(e.target.files[0])}
         />
-
-        {/* Upload Icon */}
         <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📄</div>
-
         {file ? (
           <div>
             <p style={{ color: 'var(--color-gold)', fontWeight: '600', fontSize: '1rem' }}>
@@ -164,7 +146,7 @@ export default function DocumentScanner() {
         )}
       </div>
 
-      {/* Error Message */}
+      {/* Error */}
       {error && (
         <div style={{
           background: 'rgba(220, 38, 38, 0.1)',
@@ -200,13 +182,9 @@ export default function DocumentScanner() {
         {loading ? 'Scanning Document...' : 'Scan for Red Flags'}
       </button>
 
-      {/* Loading State */}
+      {/* Loading */}
       {loading && (
-        <div style={{
-          textAlign: 'center',
-          padding: '2rem',
-          color: 'var(--color-text-secondary)',
-        }}>
+        <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--color-text-secondary)' }}>
           <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>⚖️</div>
           <p>Lexa is analyzing your document...</p>
           <p style={{ fontSize: '0.875rem', marginTop: '0.5rem' }}>
@@ -233,13 +211,12 @@ export default function DocumentScanner() {
           }}>
             Document Analysis
           </h2>
-          <div style={{
-            color: 'var(--color-text-primary)',
-            lineHeight: '1.8',
-            fontSize: '0.95rem',
-          }}>
-            <ReactMarkdown>{analysis}</ReactMarkdown>
+          <div style={{ color: 'var(--color-text-primary)', lineHeight: '1.8', fontSize: '0.95rem' }}>
+            <ReactMarkdown>{DOMPurify.sanitize(analysis)}</ReactMarkdown>
           </div>
+          <p style={{ marginTop: '1.5rem', fontSize: '0.8rem', color: 'var(--color-text-secondary)', borderTop: '1px solid var(--color-border)', paddingTop: '1rem' }}>
+            ⚠️ This is AI-generated analysis. Have a lawyer review before signing any document.
+          </p>
         </div>
       )}
     </div>

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
+import DOMPurify from 'dompurify'
 
 const CATEGORIES = [
   'Criminal', 'Civil', 'Consumer', 'Property',
@@ -54,8 +55,6 @@ export default function CaseFinder() {
       maxWidth: '800px',
       margin: '0 auto',
     }}>
-
-      {/* Header */}
       <div style={{ marginBottom: '2rem' }}>
         <h1 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '0.5rem' }}>
           Landmark Case Finder
@@ -65,7 +64,6 @@ export default function CaseFinder() {
         </p>
       </div>
 
-      {/* Category */}
       <div style={{ marginBottom: '1.5rem' }}>
         <label style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)', letterSpacing: '0.08em', display: 'block', marginBottom: '0.75rem' }}>
           LEGAL CATEGORY
@@ -94,7 +92,6 @@ export default function CaseFinder() {
         </div>
       </div>
 
-      {/* Situation */}
       <div style={{ marginBottom: '1.5rem' }}>
         <label style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)', letterSpacing: '0.08em', display: 'block', marginBottom: '0.5rem' }}>
           DESCRIBE YOUR LEGAL SITUATION
@@ -125,7 +122,6 @@ export default function CaseFinder() {
         </div>
       </div>
 
-      {/* Error */}
       {error && (
         <div style={{
           background: 'rgba(220, 38, 38, 0.1)',
@@ -140,7 +136,6 @@ export default function CaseFinder() {
         </div>
       )}
 
-      {/* Find Button */}
       <button
         onClick={handleFind}
         disabled={!situation.trim() || loading}
@@ -161,7 +156,6 @@ export default function CaseFinder() {
         {loading ? 'Searching Cases...' : 'Find Relevant Cases'}
       </button>
 
-      {/* Loading */}
       {loading && (
         <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--color-text-secondary)' }}>
           <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>⚖️</div>
@@ -170,7 +164,6 @@ export default function CaseFinder() {
         </div>
       )}
 
-      {/* Results */}
       {judgments && (
         <div style={{
           background: 'var(--color-surface)',
@@ -189,7 +182,7 @@ export default function CaseFinder() {
             Relevant Judgments
           </h2>
           <div style={{ color: 'var(--color-text-primary)', lineHeight: '1.8', fontSize: '0.95rem' }}>
-            <ReactMarkdown>{judgments}</ReactMarkdown>
+            <ReactMarkdown>{DOMPurify.sanitize(judgments)}</ReactMarkdown>
           </div>
           <p style={{ marginTop: '1.5rem', fontSize: '0.8rem', color: 'var(--color-text-secondary)', borderTop: '1px solid var(--color-border)', paddingTop: '1rem' }}>
             ⚠️ Always verify case citations on Indian Kanoon (indiankanoon.org) before using in court proceedings.
