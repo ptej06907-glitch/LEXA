@@ -1,5 +1,7 @@
 import { AnimatePresence, motion } from 'motion/react'
+import { useState } from 'react'
 import { BrowserRouter, Link, Route, Routes, useLocation } from 'react-router-dom'
+import { ArrowUpRight, BookOpen, FileSearch, FileText, Menu, MessageSquareText, Scale, ShieldCheck, Sparkles, X } from 'lucide-react'
 import LegalAdvisor from './pages/LegalAdvisor'
 import DocumentScanner from './pages/DocumentScanner'
 import FIRGenerator from './pages/FIRGenerator'
@@ -15,8 +17,17 @@ const navItems = [
   ['/judgments', 'Case Finder'],
 ]
 
+const tools = [
+  { path: '/advisor', title: 'Legal Advice', copy: 'Understand your position, rights, and practical next steps under Indian law.', icon: MessageSquareText, featured: true },
+  { path: '/scanner', title: 'Document Scan', copy: 'Review contracts and agreements for risks, unfair clauses, and missing protections.', icon: FileSearch, featured: true },
+  { path: '/fir', title: 'FIR Draft', copy: 'Build a structured first information report through a guided workflow.', icon: FileText },
+  { path: '/notice', title: 'Legal Notice', copy: 'Prepare a formal notice with the correct structure and legal framing.', icon: Scale },
+  { path: '/judgments', title: 'Case Finder', copy: 'Research relevant Supreme Court and High Court precedents.', icon: BookOpen },
+]
+
 function Navbar() {
   const location = useLocation()
+  const [menuOpen, setMenuOpen] = useState(false)
 
   return (
     <nav className="navbar" aria-label="Main navigation" style={{ position: 'fixed', inset: '0 0 auto', zIndex: 100, background: 'rgba(10, 10, 15, 0.94)', backdropFilter: 'blur(14px)' }}>
@@ -34,33 +45,40 @@ function Navbar() {
           </Link>
         ))}
       </div>
+      <button type="button" className="mobile-menu-button" onClick={() => setMenuOpen((open) => !open)} aria-expanded={menuOpen} aria-controls="mobile-navigation" aria-label={menuOpen ? 'Close navigation' : 'Open navigation'}>
+        {menuOpen ? <X size={20} /> : <Menu size={20} />}
+      </button>
+      <AnimatePresence>
+        {menuOpen && (
+          <>
+            <motion.button className="mobile-drawer-backdrop" type="button" aria-label="Close navigation" onClick={() => setMenuOpen(false)} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} />
+            <motion.div id="mobile-navigation" className="mobile-drawer" initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 24 }} transition={{ duration: .18, ease: 'easeOut' }}>
+              {navItems.map(([path, label]) => <Link key={path} to={path} onClick={() => setMenuOpen(false)} aria-current={location.pathname === path ? 'page' : undefined}>{label}</Link>)}
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </nav>
   )
 }
 
 function Home() {
   return (
-    <main className="hero" style={{ minHeight: '100vh', paddingTop: '8rem' }}>
+    <main className="hero" style={{ minHeight: '100vh', paddingTop: '8rem', justifyContent: 'flex-start' }}>
       <p className="page-eyebrow">Indian law, made understandable</p>
       <TextEffect className="hero__heading">Your AI Legal Advisor</TextEffect>
       <p className="hero__subheading">
         Practical guidance on Indian law — from legal questions and document review to FIR drafts, notices, and court judgments.
       </p>
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 'var(--space-md)' }}>
-        <Link className="home-action home-action--primary" to="/advisor" style={{ background: 'var(--color-gold)', color: 'var(--color-bg)', padding: '.875rem 1.75rem', fontWeight: 650, textDecoration: 'none' }}>
-          Get Legal Help
-        </Link>
-        <Link className="home-action home-action--secondary" to="/scanner" style={{ border: '1px solid var(--color-border)', color: 'var(--color-text-primary)', padding: '.875rem 1.75rem', fontWeight: 650, textDecoration: 'none' }}>
-          Scan a Document
-        </Link>
-      </div>
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 'var(--space-md)', marginTop: 'var(--space-lg)' }}>
-        {navItems.slice(2).map(([path, label]) => (
-          <Link key={path} className="nav-link" to={path} style={{ color: 'var(--color-text-secondary)', padding: '.45rem .7rem', textDecoration: 'none', fontSize: '.875rem' }}>
-            {label} →
+      <div className="tool-grid">
+        {tools.map(({ path, title, copy, icon: Icon, featured }) => (
+          <Link key={path} className={`tool-card${featured ? ' tool-card--featured' : ''}`} to={path}>
+            <span className="tool-card__icon"><Icon size={18} aria-hidden="true" /></span>
+            <h2>{title}</h2><p>{copy}</p><ArrowUpRight className="tool-card__arrow" size={17} aria-hidden="true" />
           </Link>
         ))}
       </div>
+      <div className="trust-strip"><span><ShieldCheck size={14} /> Strict input and upload controls</span><span><Sparkles size={14} /> No account required</span><span><Scale size={14} /> Always verify with a lawyer</span></div>
     </main>
   )
 }

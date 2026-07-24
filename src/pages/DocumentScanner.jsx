@@ -2,6 +2,8 @@ import { useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import DOMPurify from 'dompurify'
 import Button from '../components/Button'
+import LoadingState from '../components/LoadingState'
+import { FileCheck2, UploadCloud } from 'lucide-react'
 
 export default function DocumentScanner() {
   const [file, setFile] = useState(null)
@@ -78,14 +80,14 @@ export default function DocumentScanner() {
         aria-label={file ? `Selected ${file.name}. Choose a different document` : 'Choose a PDF or Word document'}
       >
         <input ref={fileInputRef} type="file" accept=".pdf,.doc,.docx" hidden disabled={loading} onChange={(e) => e.target.files[0] && handleFileSelect(e.target.files[0])} />
-        <div aria-hidden="true" style={{ fontSize: '2.5rem', marginBottom: 'var(--space-md)' }}>▤</div>
+        <div className="tool-card__icon" aria-hidden="true" style={{ margin: '0 auto var(--space-md)' }}>{file ? <FileCheck2 size={19} /> : <UploadCloud size={19} />}</div>
         {file ? <><p style={{ color: 'var(--color-gold)', fontWeight: 650, margin: 0 }}>{file.name}</p><p style={{ color: 'var(--color-text-secondary)', fontSize: '.875rem', margin: '.25rem 0 0' }}>{(file.size / 1024 / 1024).toFixed(2)} MB — Click to change file</p></> : <><p style={{ fontWeight: 650, margin: 0 }}>Drop your document here or click to browse</p><p style={{ color: 'var(--color-text-secondary)', fontSize: '.875rem', margin: '.5rem 0 0' }}>PDF, DOC, or DOCX · Maximum 10MB</p></>}
       </div>
 
       <div style={{ height: 'var(--space-lg)' }} />
       {error && <div className="alert-error" role="alert">{error}</div>}
       <Button onClick={handleScan} disabled={!file} loading={loading} fullWidth className="mb-8">Scan for Red Flags</Button>
-      {loading && <div className="loading-panel" role="status"><span className="loading-spinner" aria-hidden="true" /><p>Lexa is analyzing your document...</p><small>This may take 15–30 seconds for large documents</small></div>}
+      {loading && <LoadingState label="Reviewing your document" detail="Reading clauses, identifying risks, and checking for missing protections." />}
       {analysis && <article className="result-card"><div className="result-header"><h2 className="result-title">Document Analysis</h2></div><div className="result-content"><ReactMarkdown>{DOMPurify.sanitize(analysis)}</ReactMarkdown></div><p className="result-disclaimer">This is AI-generated analysis. Have a lawyer review the document before signing.</p></article>}
     </main>
   )

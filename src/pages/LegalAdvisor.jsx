@@ -2,6 +2,8 @@ import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import DOMPurify from 'dompurify'
 import Button from '../components/Button'
+import LoadingState from '../components/LoadingState'
+import { ArrowUp } from 'lucide-react'
 import useAutoResizeTextarea from '../hooks/useAutoResizeTextarea'
 
 const CATEGORIES = ['Criminal', 'Civil', 'Consumer', 'Property', 'Employment', 'Family', 'Constitutional', 'General']
@@ -57,7 +59,7 @@ export default function LegalAdvisor() {
         </div>
       </section>
 
-      <div className="form-section">
+      <div className="composer">
         <label className="field-label" htmlFor="legal-situation">Your situation</label>
         <textarea
           id="legal-situation"
@@ -75,15 +77,11 @@ export default function LegalAdvisor() {
           rows={1}
           maxLength={2000}
         />
-        <div className="char-count" aria-live="polite">{situation.length}/2000</div>
+        <div className="composer__footer"><span className="composer__hint">Enter to send · Shift+Enter for a new line · {situation.length}/2000</span><Button onClick={handleSubmit} disabled={!situation.trim()} loading={loading} aria-label="Get legal advice"><ArrowUp size={17} /> Ask Lexa</Button></div>
       </div>
 
-      {error && <div className="alert-error" role="alert">{error}</div>}
-      <Button onClick={handleSubmit} disabled={!situation.trim()} loading={loading} fullWidth className="mb-8">
-        Get Legal Advice
-      </Button>
-
-      {loading && <div className="loading-panel" role="status"><span className="loading-spinner" aria-hidden="true" /><p>Lexa is analyzing your situation...</p><small>This may take a few seconds</small></div>}
+      {error && <div className="alert-error" role="alert" style={{ marginTop: 'var(--space-lg)' }}>{error}</div>}
+      {loading && <LoadingState label="Reviewing your legal situation" detail="Identifying relevant rights, provisions, and practical next steps." />}
 
       {advice && (
         <article className="result-card">
