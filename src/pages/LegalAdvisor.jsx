@@ -5,6 +5,7 @@ import Button from '../components/Button'
 import LoadingState from '../components/LoadingState'
 import { ArrowUp } from 'lucide-react'
 import useAutoResizeTextarea from '../hooks/useAutoResizeTextarea'
+import { apiUrl } from '../lib/api'
 
 const CATEGORIES = ['Criminal', 'Civil', 'Consumer', 'Property', 'Employment', 'Family', 'Constitutional', 'General']
 
@@ -27,7 +28,7 @@ export default function LegalAdvisor() {
     setAdvice('')
 
     try {
-      const response = await fetch('http://localhost:3001/api/legal/advice', {
+      const response = await fetch(apiUrl('/api/legal/advice'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ situation, category }),

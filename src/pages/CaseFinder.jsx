@@ -4,6 +4,7 @@ import DOMPurify from 'dompurify'
 import Button from '../components/Button'
 import LoadingState from '../components/LoadingState'
 import { Search } from 'lucide-react'
+import { apiUrl } from '../lib/api'
 import useAutoResizeTextarea from '../hooks/useAutoResizeTextarea'
 
 const CATEGORIES = ['Criminal', 'Civil', 'Consumer', 'Property', 'Employment', 'Family', 'Constitutional', 'Cyber']
@@ -25,7 +26,7 @@ export default function CaseFinder() {
     setError('')
     setJudgments('')
     try {
-      const response = await fetch('http://localhost:3001/api/judgment/find', {
+      const response = await fetch(apiUrl('/api/judgment/find'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ situation, category }),

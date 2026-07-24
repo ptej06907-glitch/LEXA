@@ -10,6 +10,7 @@ import Stepper from '../components/Stepper'
 import Toast from '../components/Toast'
 import useAutoResizeTextarea from '../hooks/useAutoResizeTextarea'
 import exportLegalPdf from '../utils/exportLegalPdf'
+import { apiUrl } from '../lib/api'
 
 const CATEGORIES = ['Theft', 'Assault', 'Fraud', 'Cybercrime', 'Harassment', 'Domestic Violence', 'Property Dispute', 'Other']
 const STEPS = ['Incident details', 'What happened', 'Review']
@@ -36,7 +37,7 @@ export default function FIRGenerator() {
     setError('')
     setFir('')
     try {
-      const response = await fetch('http://localhost:3001/api/fir/generate', {
+      const response = await fetch(apiUrl('/api/fir/generate'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ incident, category, location, date }),

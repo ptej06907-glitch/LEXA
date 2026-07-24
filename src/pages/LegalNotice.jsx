@@ -10,6 +10,7 @@ import Stepper from '../components/Stepper'
 import Toast from '../components/Toast'
 import useAutoResizeTextarea from '../hooks/useAutoResizeTextarea'
 import exportLegalPdf from '../utils/exportLegalPdf'
+import { apiUrl } from '../lib/api'
 
 const NOTICE_TYPES = ['Demand Notice', 'Cease and Desist', 'Eviction Notice', 'Employment Termination', 'Consumer Complaint', 'Defamation', 'Recovery of Money', 'Property Dispute']
 const RECIPIENT_TYPES = ['Individual', 'Company', 'Landlord', 'Tenant', 'Employer', 'Employee', 'Bank', 'Government Body']
@@ -36,7 +37,7 @@ export default function LegalNotice() {
     setError('')
     setNotice('')
     try {
-      const response = await fetch('http://localhost:3001/api/notice/generate', {
+      const response = await fetch(apiUrl('/api/notice/generate'), {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ situation, noticeType, recipientType }),
       })
       const data = await response.json()

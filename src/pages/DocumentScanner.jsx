@@ -4,6 +4,7 @@ import DOMPurify from 'dompurify'
 import Button from '../components/Button'
 import LoadingState from '../components/LoadingState'
 import { FileCheck2, UploadCloud } from 'lucide-react'
+import { apiUrl } from '../lib/api'
 
 export default function DocumentScanner() {
   const [file, setFile] = useState(null)
@@ -48,7 +49,7 @@ export default function DocumentScanner() {
     try {
       const formData = new FormData()
       formData.append('document', file)
-      const response = await fetch('http://localhost:3001/api/document/scan', { method: 'POST', body: formData })
+      const response = await fetch(apiUrl('/api/document/scan'), { method: 'POST', body: formData })
       const data = await response.json()
       if (!response.ok) throw new Error(data.error || 'Failed to scan document')
       setAnalysis(data.analysis)
