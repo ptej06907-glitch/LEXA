@@ -1,6 +1,7 @@
-import { useState, useRef } from 'react'
+import { useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import DOMPurify from 'dompurify'
+import Button from '../components/Button'
 
 export default function DocumentScanner() {
   const [file, setFile] = useState(null)
@@ -11,22 +12,15 @@ export default function DocumentScanner() {
   const fileInputRef = useRef(null)
 
   const handleFileSelect = (selectedFile) => {
-    const allowedTypes = [
-      'application/pdf',
-      'application/msword',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    ]
-
+    const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
     if (!allowedTypes.includes(selectedFile.type)) {
       setError('Only PDF and DOCX files are supported')
       return
     }
-
     if (selectedFile.size > 10 * 1024 * 1024) {
       setError('File size must be under 10MB')
       return
     }
-
     setFile(selectedFile)
     setError('')
     setAnalysis('')
@@ -38,12 +32,7 @@ export default function DocumentScanner() {
     const droppedFile = e.dataTransfer.files[0]
     if (droppedFile) handleFileSelect(droppedFile)
   }
-
-  const handleDragOver = (e) => {
-    e.preventDefault()
-    setDragOver(true)
-  }
-
+  const handleDragOver = (e) => { e.preventDefault(); setDragOver(true) }
   const handleDragLeave = () => setDragOver(false)
 
   const handleScan = async () => {
@@ -51,26 +40,15 @@ export default function DocumentScanner() {
       setError('Please select a file first')
       return
     }
-
     setLoading(true)
     setError('')
     setAnalysis('')
-
     try {
       const formData = new FormData()
       formData.append('document', file)
-
-      const response = await fetch('http://localhost:3001/api/document/scan', {
-        method: 'POST',
-        body: formData,
-      })
-
+      const response = await fetch('http://localhost:3001/api/document/scan', { method: 'POST', body: formData })
       const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to scan document')
-      }
-
+      if (!response.ok) throw new Error(data.error || 'Failed to scan document')
       setAnalysis(data.analysis)
     } catch (err) {
       setError(err.message || 'Something went wrong. Please try again.')
@@ -79,146 +57,36 @@ export default function DocumentScanner() {
     }
   }
 
+  const openFilePicker = () => {
+    if (!loading) fileInputRef.current?.click()
+  }
+
   return (
-    <div style={{
-      minHeight: '100vh',
-      background: 'var(--color-bg)',
-      color: 'var(--color-text-primary)',
-      padding: '2rem',
-      paddingTop: '6rem',
-      maxWidth: '800px',
-      margin: '0 auto',
-    }}>
+    <main className="page-shell">
+      <header className="page-header"><p className="page-eyebrow">Review before you sign</p><h1 className="page-title">Document Scanner</h1><p className="page-subtitle">Upload a legal document and Lexa will identify red flags, unfair clauses, and potential risks.</p></header>
 
-      {/* Header */}
-      <div style={{ marginBottom: '2rem' }}>
-        <h1 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '0.5rem' }}>
-          Document Scanner
-        </h1>
-        <p style={{ color: 'var(--color-text-secondary)' }}>
-          Upload any legal document — contract, agreement, rental deed — and Lexa will find red flags, unfair clauses, and exploits.
-        </p>
-      </div>
-
-      {/* File Upload Area */}
       <div
+        className={`upload-zone${dragOver ? ' upload-zone--active' : ''}`}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
-        onClick={() => fileInputRef.current.click()}
-        style={{
-          border: `2px dashed ${dragOver ? 'var(--color-gold)' : 'var(--color-border)'}`,
-          borderRadius: '12px',
-          padding: '3rem 2rem',
-          textAlign: 'center',
-          cursor: 'pointer',
-          background: dragOver ? 'rgba(201, 168, 76, 0.05)' : 'var(--color-surface)',
-          transition: 'all 0.2s ease',
-          marginBottom: '1.5rem',
-        }}
+        onClick={openFilePicker}
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openFilePicker() } }}
+        role="button"
+        tabIndex={loading ? -1 : 0}
+        aria-disabled={loading}
+        aria-label={file ? `Selected ${file.name}. Choose a different document` : 'Choose a PDF or Word document'}
       >
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept=".pdf,.doc,.docx"
-          style={{ display: 'none' }}
-          onChange={(e) => e.target.files[0] && handleFileSelect(e.target.files[0])}
-        />
-        <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📄</div>
-        {file ? (
-          <div>
-            <p style={{ color: 'var(--color-gold)', fontWeight: '600', fontSize: '1rem' }}>
-              {file.name}
-            </p>
-            <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.875rem', marginTop: '0.25rem' }}>
-              {(file.size / 1024 / 1024).toFixed(2)} MB — Click to change file
-            </p>
-          </div>
-        ) : (
-          <div>
-            <p style={{ color: 'var(--color-text-primary)', fontWeight: '600', fontSize: '1rem' }}>
-              Drop your document here or click to browse
-            </p>
-            <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.875rem', marginTop: '0.5rem' }}>
-              Supports PDF and DOCX — Max 10MB
-            </p>
-          </div>
-        )}
+        <input ref={fileInputRef} type="file" accept=".pdf,.doc,.docx" hidden disabled={loading} onChange={(e) => e.target.files[0] && handleFileSelect(e.target.files[0])} />
+        <div aria-hidden="true" style={{ fontSize: '2.5rem', marginBottom: 'var(--space-md)' }}>▤</div>
+        {file ? <><p style={{ color: 'var(--color-gold)', fontWeight: 650, margin: 0 }}>{file.name}</p><p style={{ color: 'var(--color-text-secondary)', fontSize: '.875rem', margin: '.25rem 0 0' }}>{(file.size / 1024 / 1024).toFixed(2)} MB — Click to change file</p></> : <><p style={{ fontWeight: 650, margin: 0 }}>Drop your document here or click to browse</p><p style={{ color: 'var(--color-text-secondary)', fontSize: '.875rem', margin: '.5rem 0 0' }}>PDF, DOC, or DOCX · Maximum 10MB</p></>}
       </div>
 
-      {/* Error */}
-      {error && (
-        <div style={{
-          background: 'rgba(220, 38, 38, 0.1)',
-          border: '1px solid rgba(220, 38, 38, 0.3)',
-          borderRadius: '8px',
-          padding: '1rem',
-          color: '#f87171',
-          marginBottom: '1.5rem',
-          fontSize: '0.9rem',
-        }}>
-          {error}
-        </div>
-      )}
-
-      {/* Scan Button */}
-      <button
-        onClick={handleScan}
-        disabled={!file || loading}
-        style={{
-          background: !file || loading ? '#333' : 'var(--color-gold)',
-          color: !file || loading ? '#666' : '#000',
-          border: 'none',
-          borderRadius: '8px',
-          padding: '0.875rem 2rem',
-          fontSize: '1rem',
-          fontWeight: '600',
-          cursor: !file || loading ? 'not-allowed' : 'pointer',
-          width: '100%',
-          marginBottom: '2rem',
-          transition: 'all 0.2s ease',
-        }}
-      >
-        {loading ? 'Scanning Document...' : 'Scan for Red Flags'}
-      </button>
-
-      {/* Loading */}
-      {loading && (
-        <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--color-text-secondary)' }}>
-          <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>⚖️</div>
-          <p>Lexa is analyzing your document...</p>
-          <p style={{ fontSize: '0.875rem', marginTop: '0.5rem' }}>
-            This may take 15-30 seconds for large documents
-          </p>
-        </div>
-      )}
-
-      {/* Analysis Results */}
-      {analysis && (
-        <div style={{
-          background: 'var(--color-surface)',
-          border: '1px solid var(--color-border)',
-          borderRadius: '12px',
-          padding: '2rem',
-        }}>
-          <h2 style={{
-            fontSize: '1.25rem',
-            fontWeight: '600',
-            color: 'var(--color-gold)',
-            marginBottom: '1.5rem',
-            borderBottom: '1px solid var(--color-border)',
-            paddingBottom: '1rem',
-          }}>
-            Document Analysis
-          </h2>
-          <div style={{ color: 'var(--color-text-primary)', lineHeight: '1.8', fontSize: '0.95rem' }}>
-            <ReactMarkdown>{DOMPurify.sanitize(analysis)}</ReactMarkdown>
-          </div>
-          <p style={{ marginTop: '1.5rem', fontSize: '0.8rem', color: 'var(--color-text-secondary)', borderTop: '1px solid var(--color-border)', paddingTop: '1rem' }}>
-            ⚠️ This is AI-generated analysis. Have a lawyer review before signing any document.
-          </p>
-        </div>
-      )}
-    </div>
+      <div style={{ height: 'var(--space-lg)' }} />
+      {error && <div className="alert-error" role="alert">{error}</div>}
+      <Button onClick={handleScan} disabled={!file} loading={loading} fullWidth className="mb-8">Scan for Red Flags</Button>
+      {loading && <div className="loading-panel" role="status"><span className="loading-spinner" aria-hidden="true" /><p>Lexa is analyzing your document...</p><small>This may take 15–30 seconds for large documents</small></div>}
+      {analysis && <article className="result-card"><div className="result-header"><h2 className="result-title">Document Analysis</h2></div><div className="result-content"><ReactMarkdown>{DOMPurify.sanitize(analysis)}</ReactMarkdown></div><p className="result-disclaimer">This is AI-generated analysis. Have a lawyer review the document before signing.</p></article>}
+    </main>
   )
 }

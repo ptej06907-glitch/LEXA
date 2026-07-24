@@ -1,36 +1,38 @@
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+import { AnimatePresence, motion } from 'motion/react'
+import { BrowserRouter, Link, Route, Routes, useLocation } from 'react-router-dom'
 import LegalAdvisor from './pages/LegalAdvisor'
 import DocumentScanner from './pages/DocumentScanner'
 import FIRGenerator from './pages/FIRGenerator'
 import LegalNotice from './pages/LegalNotice'
 import CaseFinder from './pages/CaseFinder'
+import TextEffect from './components/motion/TextEffect'
+
+const navItems = [
+  ['/advisor', 'Legal Advice'],
+  ['/scanner', 'Document Scan'],
+  ['/fir', 'FIR Generator'],
+  ['/notice', 'Legal Notice'],
+  ['/judgments', 'Case Finder'],
+]
 
 function Navbar() {
+  const location = useLocation()
+
   return (
-    <nav style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      zIndex: 100,
-      background: 'rgba(10, 10, 15, 0.95)',
-      backdropFilter: 'blur(10px)',
-      borderBottom: '1px solid var(--color-border)',
-      padding: '1rem 2rem',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-    }}>
-      <Link to="/" style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--color-gold)', textDecoration: 'none', letterSpacing: '0.1em' }}>
-        LEXA
-      </Link>
-      <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-        <Link to="/advisor" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>Legal Advice</Link>
-        <Link to="/scanner" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>Document Scan</Link>
-        <Link to="/fir" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>FIR Generator</Link>
-        <Link to="/notice" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>Legal Notice</Link>
-        <Link to="/judgments" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>Case Finder</Link>
-        <Link to="/" style={{ color: 'var(--color-text-primary)', textDecoration: 'none', fontSize: '0.9rem', border: '1px solid var(--color-border)', padding: '0.4rem 1rem', borderRadius: '6px' }}>Sign In</Link>
+    <nav className="navbar" aria-label="Main navigation" style={{ position: 'fixed', inset: '0 0 auto', zIndex: 100, background: 'rgba(10, 10, 15, 0.94)', backdropFilter: 'blur(14px)' }}>
+      <Link className="navbar__logo" to="/" aria-label="Lexa home">LEXA</Link>
+      <div className="navbar__links" style={{ overflowX: 'auto' }}>
+        {navItems.map(([path, label]) => (
+          <Link
+            key={path}
+            to={path}
+            className={`navbar__link nav-link${location.pathname === path ? ' navbar__link--active' : ''}`}
+            style={{ padding: '.4rem .55rem', whiteSpace: 'nowrap' }}
+            aria-current={location.pathname === path ? 'page' : undefined}
+          >
+            {label}
+          </Link>
+        ))}
       </div>
     </nav>
   )
@@ -38,31 +40,54 @@ function Navbar() {
 
 function Home() {
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--color-bg)', color: 'var(--color-text-primary)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '2rem' }}>
-      <h1 style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '1.5rem', lineHeight: '1.2' }}>
-        Your AI Legal Advisor
-      </h1>
-      <p style={{ color: 'var(--color-text-secondary)', fontSize: '1.25rem', maxWidth: '600px', marginBottom: '2.5rem', lineHeight: '1.6' }}>
-        Expert guidance on Indian law — IPC, CrPC, Constitution, document review, and court judgments — powered by AI.
+    <main className="hero" style={{ minHeight: '100vh', paddingTop: '8rem' }}>
+      <p className="page-eyebrow">Indian law, made understandable</p>
+      <TextEffect className="hero__heading">Your AI Legal Advisor</TextEffect>
+      <p className="hero__subheading">
+        Practical guidance on Indian law — from legal questions and document review to FIR drafts, notices, and court judgments.
       </p>
-      <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-        <Link to="/advisor" style={{ background: 'var(--color-gold)', color: '#000', padding: '0.875rem 2rem', borderRadius: '8px', textDecoration: 'none', fontWeight: '600', fontSize: '1rem' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 'var(--space-md)' }}>
+        <Link className="home-action home-action--primary" to="/advisor" style={{ background: 'var(--color-gold)', color: 'var(--color-bg)', padding: '.875rem 1.75rem', fontWeight: 650, textDecoration: 'none' }}>
           Get Legal Help
         </Link>
-        <Link to="/scanner" style={{ background: 'transparent', color: 'var(--color-text-primary)', padding: '0.875rem 2rem', borderRadius: '8px', textDecoration: 'none', fontWeight: '600', fontSize: '1rem', border: '1px solid var(--color-border)' }}>
+        <Link className="home-action home-action--secondary" to="/scanner" style={{ border: '1px solid var(--color-border)', color: 'var(--color-text-primary)', padding: '.875rem 1.75rem', fontWeight: 650, textDecoration: 'none' }}>
           Scan a Document
         </Link>
-        <Link to="/fir" style={{ background: 'transparent', color: 'var(--color-text-primary)', padding: '0.875rem 2rem', borderRadius: '8px', textDecoration: 'none', fontWeight: '600', fontSize: '1rem', border: '1px solid var(--color-border)' }}>
-          Draft an FIR
-        </Link>
-        <Link to="/notice" style={{ background: 'transparent', color: 'var(--color-text-primary)', padding: '0.875rem 2rem', borderRadius: '8px', textDecoration: 'none', fontWeight: '600', fontSize: '1rem', border: '1px solid var(--color-border)' }}>
-          Legal Notice
-        </Link>
-        <Link to="/judgments" style={{ background: 'transparent', color: 'var(--color-text-primary)', padding: '0.875rem 2rem', borderRadius: '8px', textDecoration: 'none', fontWeight: '600', fontSize: '1rem', border: '1px solid var(--color-border)' }}>
-          Find Cases
-        </Link>
       </div>
-    </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 'var(--space-md)', marginTop: 'var(--space-lg)' }}>
+        {navItems.slice(2).map(([path, label]) => (
+          <Link key={path} className="nav-link" to={path} style={{ color: 'var(--color-text-secondary)', padding: '.45rem .7rem', textDecoration: 'none', fontSize: '.875rem' }}>
+            {label} →
+          </Link>
+        ))}
+      </div>
+    </main>
+  )
+}
+
+const transition = {
+  initial: { opacity: 0, y: 8 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -4 },
+  transition: { duration: 0.2, ease: 'easeOut' },
+}
+
+function AnimatedRoutes() {
+  const location = useLocation()
+
+  return (
+    <AnimatePresence mode="wait" initial={false}>
+      <motion.div key={location.pathname} {...transition} style={{ minHeight: '100vh' }}>
+        <Routes location={location}>
+          <Route path="/" element={<Home />} />
+          <Route path="/advisor" element={<LegalAdvisor />} />
+          <Route path="/scanner" element={<DocumentScanner />} />
+          <Route path="/fir" element={<FIRGenerator />} />
+          <Route path="/notice" element={<LegalNotice />} />
+          <Route path="/judgments" element={<CaseFinder />} />
+        </Routes>
+      </motion.div>
+    </AnimatePresence>
   )
 }
 
@@ -70,14 +95,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/advisor" element={<LegalAdvisor />} />
-        <Route path="/scanner" element={<DocumentScanner />} />
-        <Route path="/fir" element={<FIRGenerator />} />
-        <Route path="/notice" element={<LegalNotice />} />
-        <Route path="/judgments" element={<CaseFinder />} />
-      </Routes>
+      <AnimatedRoutes />
     </BrowserRouter>
   )
 }

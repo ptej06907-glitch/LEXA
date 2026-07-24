@@ -15,7 +15,7 @@ const JUDGMENT_SYSTEM_PROMPT = `You are Lexa, an expert Indian legal researcher 
 
 Always include actual case names and citations. Focus on cases that are directly relevant and frequently cited in Indian courts.`
 
-export async function findJudgments(req, res) {
+export async function findJudgments(req, res, next) {
   try {
     const { situation, category } = req.body
 
@@ -51,6 +51,6 @@ ${situation}`,
     res.json({ judgments })
   } catch (error) {
     console.error('[findJudgments]', error)
-    res.status(500).json({ error: error.message || 'Failed to find judgments' })
+    next(error)
   }
 }

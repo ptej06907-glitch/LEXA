@@ -19,14 +19,14 @@ const judgmentSchema = z.object({
     'Criminal', 'Civil', 'Consumer', 'Property',
     'Employment', 'Family', 'Constitutional', 'Cyber'
   ]).default('Civil'),
-})
+}).strict()
 
 router.post('/find', async (req, res, next) => {
   try {
     const result = judgmentSchema.safeParse(req.body)
 
     if (!result.success) {
-      const message = result.error.errors[0]?.message || 'Invalid request'
+      const message = result.error.issues[0]?.message || 'Invalid request'
       return res.status(400).json({ error: message })
     }
 

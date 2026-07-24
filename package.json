@@ -9,6 +9,7 @@
     "dev:all": "npm run server & npm run dev",
     "build": "vite build",
     "lint": "eslint .",
+    "test:security": "node server/securitySmokeTest.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -22,12 +23,13 @@
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "express-rate-limit": "^8.6.0",
-    "framer-motion": "^12.42.2",
     "groq-sdk": "^1.3.0",
     "helmet": "^8.3.0",
     "jsonwebtoken": "^9.0.3",
+    "jspdf": "^4.2.1",
     "lucide-react": "^1.25.0",
     "mammoth": "^1.12.0",
+    "motion": "^12.42.2",
     "multer": "^2.2.0",
     "pdfreader": "^3.0.8",
     "react": "^19.2.7",

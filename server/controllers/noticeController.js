@@ -18,7 +18,7 @@ The notice must include:
 
 Use formal legal language. Cite specific Indian laws. Make it ready to send.`
 
-export async function generateNotice(req, res) {
+export async function generateNotice(req, res, next) {
   try {
     const { situation, noticeType, recipientType } = req.body
 
@@ -49,6 +49,6 @@ export async function generateNotice(req, res) {
     res.json({ notice })
   } catch (error) {
     console.error('[generateNotice]', error)
-    res.status(500).json({ error: error.message || 'Failed to generate notice' })
+    next(error)
   }
 }

@@ -20,7 +20,7 @@ const legalAdviceSchema = z.object({
     'Criminal', 'Civil', 'Consumer', 'Property',
     'Employment', 'Family', 'Constitutional', 'General'
   ]).default('General'),
-})
+}).strict()
 
 router.post('/advice', async (req, res, next) => {
   try {
@@ -29,7 +29,7 @@ router.post('/advice', async (req, res, next) => {
 
     if (!result.success) {
       /* Return first validation error clearly */
-      const message = result.error.errors[0]?.message || 'Invalid request'
+      const message = result.error.issues[0]?.message || 'Invalid request'
       return res.status(400).json({ error: message })
     }
 

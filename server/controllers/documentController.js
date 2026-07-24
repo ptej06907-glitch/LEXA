@@ -32,7 +32,7 @@ function extractTextFromPDF(filePath) {
   })
 }
 
-export async function scanDocument(req, res) {
+export async function scanDocument(req, res, next) {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded' })
@@ -44,7 +44,7 @@ export async function scanDocument(req, res) {
     if (mimetype === 'application/pdf') {
       try {
         extractedText = await extractTextFromPDF(filePath)
-      } catch (pdfErr) {
+      } catch {
         if (fs.existsSync(filePath)) fs.unlinkSync(filePath)
         return res.status(400).json({ error: 'Could not read PDF. Make sure it is not a scanned image.' })
       }
@@ -92,6 +92,7 @@ export async function scanDocument(req, res) {
     res.json({ analysis, filename: originalname, charactersAnalyzed: truncatedText.length })
   } catch (error) {
     console.error('[scanDocument]', error)
-    res.status(500).json({ error: error.message || 'Failed to scan document' })
+    if (req.file?.path && fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path)
+    next(error)
   }
 }

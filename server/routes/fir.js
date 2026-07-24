@@ -30,14 +30,14 @@ const firSchema = z.object({
     .string()
     .max(50, 'Invalid date')
     .optional(),
-})
+}).strict()
 
 router.post('/generate', async (req, res, next) => {
   try {
     const result = firSchema.safeParse(req.body)
 
     if (!result.success) {
-      const message = result.error.errors[0]?.message || 'Invalid request'
+      const message = result.error.issues[0]?.message || 'Invalid request'
       return res.status(400).json({ error: message })
     }
 

@@ -3,7 +3,7 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import path from 'path'
 import helmet from 'helmet'
-import { fileURLToPath } from 'url'
+import { fileURLToPath, pathToFileURL } from 'url'
 import { rateLimit } from 'express-rate-limit'
 import legalRouter from './routes/legal.js'
 import documentRouter from './routes/document.js'
@@ -102,20 +102,32 @@ app.use((_req, res) => {
    Users see a generic message — attackers learn nothing useful.
 ──────────────────────────────────────────────────────────────────────────── */
 app.use((err, _req, res, _next) => {
-  console.error('[Lexa API Error]', err)
-
+  const status = Number.isInteger(err.status) ? err.status : 500
   const isDev = process.env.NODE_ENV !== 'production'
-  res.status(err.status || 500).json({
-    error: isDev ? err.message : 'Something went wrong. Please try again.',
+  const safeClientErrors = {
+    400: 'Invalid request.',
+    413: 'Request payload is too large.',
+  }
+
+  if (status >= 500) console.error('[Lexa API Error]', err)
+
+  res.status(status).json({
+    error: status >= 500
+      ? (isDev ? err.message : 'Something went wrong. Please try again.')
+      : (safeClientErrors[status] || 'Request could not be processed.'),
   })
 })
 
-const server = app.listen(PORT, () => {
-  console.log(`Lexa API running on port ${PORT}`)
-})
+const isMainModule = process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href
 
-server.on('error', (err) => {
-  console.error('Server error:', err)
-})
+if (isMainModule) {
+  const server = app.listen(PORT, () => {
+    console.log(`Lexa API running on port ${PORT}`)
+  })
+
+  server.on('error', (err) => {
+    console.error('Server error:', err)
+  })
+}
 
 export default app

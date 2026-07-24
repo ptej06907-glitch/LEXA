@@ -42,6 +42,6 @@ export async function getLegalAdvice(req, res, next) {
     res.json({ advice })
   } catch (error) {
     console.error('[getLegalAdvice]', error)
-    res.status(500).json({ error: error.message || 'Failed to generate legal advice' })
+    next(error)
   }
 }

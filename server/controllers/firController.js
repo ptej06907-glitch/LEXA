@@ -22,7 +22,7 @@ The FIR must include:
 
 Use formal legal language. Cite specific IPC sections (or BNS 2023 equivalents). Make it ready to print and submit.`
 
-export async function generateFIR(req, res) {
+export async function generateFIR(req, res, next) {
   try {
     const { incident, category, location, date } = req.body
 
@@ -60,6 +60,6 @@ ${incident}`,
     res.json({ fir })
   } catch (error) {
     console.error('[generateFIR]', error)
-    res.status(500).json({ error: error.message || 'Failed to generate FIR' })
+    next(error)
   }
 }

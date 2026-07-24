@@ -18,6 +18,11 @@ const ALLOWED_MIME_TYPES = [
 ]
 
 const ALLOWED_EXTENSIONS = ['.pdf', '.doc', '.docx']
+const MIME_BY_EXTENSION = {
+  '.pdf': 'application/pdf',
+  '.doc': 'application/msword',
+  '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+}
 
 /* ─── SECURITY: Multer storage config ───────────────────────────────────────
    Files are stored temporarily in uploads/ folder.
@@ -52,7 +57,8 @@ const fileFilter = (_req, file, cb) => {
 
   if (
     ALLOWED_MIME_TYPES.includes(file.mimetype) &&
-    ALLOWED_EXTENSIONS.includes(ext)
+    ALLOWED_EXTENSIONS.includes(ext) &&
+    MIME_BY_EXTENSION[ext] === file.mimetype
   ) {
     cb(null, true)
   } else {
@@ -88,6 +94,44 @@ const handleUpload = (req, res, next) => {
   })
 }
 
-router.post('/scan', handleUpload, scanDocument)
+const hasExpectedSignature = (file) => {
+  const descriptor = fs.openSync(file.path, 'r')
+  const header = Buffer.alloc(8)
+
+  try {
+    fs.readSync(descriptor, header, 0, header.length, 0)
+  } finally {
+    fs.closeSync(descriptor)
+  }
+
+  if (file.mimetype === 'application/pdf') {
+    return header.subarray(0, 5).toString('ascii') === '%PDF-'
+  }
+
+  if (file.mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+    return header[0] === 0x50 && header[1] === 0x4b && header[2] === 0x03 && header[3] === 0x04
+  }
+
+  if (file.mimetype === 'application/msword') {
+    return header.equals(Buffer.from([0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1]))
+  }
+
+  return false
+}
+
+const validateFileSignature = (req, res, next) => {
+  if (!req.file) return next()
+
+  try {
+    if (hasExpectedSignature(req.file)) return next()
+  } catch (error) {
+    console.error('[validateFileSignature]', error)
+  }
+
+  if (fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path)
+  return res.status(400).json({ error: 'File content does not match the declared document type.' })
+}
+
+router.post('/scan', handleUpload, validateFileSignature, scanDocument)
 
 export default router
