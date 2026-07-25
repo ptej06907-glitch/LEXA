@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useState } from 'react'
 import { BrowserRouter, Link, Route, Routes, useLocation } from 'react-router-dom'
-import { ArrowUpRight, BookOpen, FileSearch, FileText, Menu, MessageSquareText, Scale, ShieldCheck, Sparkles, X } from 'lucide-react'
+import { ArrowRight, Menu, ShieldCheck, X } from 'lucide-react'
 import LegalAdvisor from './pages/LegalAdvisor'
 import DocumentScanner from './pages/DocumentScanner'
 import FIRGenerator from './pages/FIRGenerator'
@@ -18,11 +18,11 @@ const navItems = [
 ]
 
 const tools = [
-  { path: '/advisor', title: 'Legal Advice', copy: 'Understand your position, rights, and practical next steps under Indian law.', icon: MessageSquareText, featured: true },
-  { path: '/scanner', title: 'Document Scan', copy: 'Review contracts and agreements for risks, unfair clauses, and missing protections.', icon: FileSearch, featured: true },
-  { path: '/fir', title: 'FIR Draft', copy: 'Build a structured first information report through a guided workflow.', icon: FileText },
-  { path: '/notice', title: 'Legal Notice', copy: 'Prepare a formal notice with the correct structure and legal framing.', icon: Scale },
-  { path: '/judgments', title: 'Case Finder', copy: 'Research relevant Supreme Court and High Court precedents.', icon: BookOpen },
+  { number: '01', group: 'Understand', path: '/advisor', title: 'Legal Advice', copy: 'Clarify your position, possible rights, and practical next steps.' },
+  { number: '02', group: 'Understand', path: '/scanner', title: 'Document Review', copy: 'Examine agreements for risks, unfair clauses, and missing protections.' },
+  { number: '03', group: 'Prepare', path: '/fir', title: 'FIR Draft', copy: 'Organise the facts into a structured first information report.' },
+  { number: '04', group: 'Prepare', path: '/notice', title: 'Legal Notice', copy: 'Prepare a formally structured notice for review and sending.' },
+  { number: '05', group: 'Research', path: '/judgments', title: 'Case Research', copy: 'Find relevant Supreme Court and High Court precedents.' },
 ]
 
 function Navbar() {
@@ -66,28 +66,41 @@ function Navbar() {
 
 function Home() {
   return (
-    <main className="hero">
-      <header className="hero__intro">
-        <p className="hero__eyebrow"><span aria-hidden="true" />Built for Indian law</p>
-        <h1 className="hero__heading">Understand your position.<br />Prepare your next step.</h1>
-        <p className="hero__subheading">
-          Ask a legal question, review a document, or prepare a first draft. Lexa helps you organise the facts before you speak with a lawyer.
-        </p>
-        <div className="hero__scope" aria-label="Lexa capabilities">
-          <span>Legal guidance</span>
-          <span>Document review</span>
-          <span>Draft preparation</span>
+    <main className="home">
+      <section className="home__opening" aria-labelledby="home-title">
+        <header className="home__intro">
+          <p className="home__kicker">Lexa · Indian legal tools</p>
+          <h1 id="home-title">A practical starting point for legal matters.</h1>
+          <p>Understand an issue, examine a document, or organise a first draft before consulting a legal professional.</p>
+        </header>
+        <Link className="home__primary-action" to="/advisor">
+          <span><small>Not sure where to begin?</small><strong>Start with legal guidance</strong></span>
+          <ArrowRight size={20} aria-hidden="true" />
+        </Link>
+      </section>
+
+      <section className="service-index" aria-labelledby="services-title">
+        <header className="service-index__header">
+          <div><p className="section-label">Services</p><h2 id="services-title">Choose a starting point</h2></div>
+          <p>Each tool guides you through the information needed for that task.</p>
+        </header>
+        <div className="service-index__list">
+          {tools.map(({ number, group, path, title, copy }) => (
+            <Link key={path} className="service-row" to={path}>
+              <span className="service-row__number">{number}</span>
+              <span className="service-row__group">{group}</span>
+              <h3>{title}</h3>
+              <p>{copy}</p>
+              <ArrowRight className="service-row__arrow" size={18} aria-hidden="true" />
+            </Link>
+          ))}
         </div>
-      </header>
-      <div className="tool-grid">
-        {tools.map(({ path, title, copy, icon: Icon, featured }) => (
-          <Link key={path} className={`tool-card${featured ? ' tool-card--featured' : ''}`} to={path}>
-            <span className="tool-card__icon"><Icon size={18} aria-hidden="true" /></span>
-            <h2>{title}</h2><p>{copy}</p><ArrowUpRight className="tool-card__arrow" size={17} aria-hidden="true" />
-          </Link>
-        ))}
-      </div>
-      <div className="trust-strip"><span><ShieldCheck size={14} /> Strict input and upload controls</span><span><Sparkles size={14} /> No account required</span><span><Scale size={14} /> Always verify with a lawyer</span></div>
+      </section>
+
+      <aside className="home__notice" aria-label="Important information">
+        <ShieldCheck size={17} aria-hidden="true" />
+        <div><strong>Designed to help you prepare</strong><p>Lexa provides general legal information and drafting assistance. Verify important decisions and documents with a qualified lawyer.</p></div>
+      </aside>
     </main>
   )
 }
