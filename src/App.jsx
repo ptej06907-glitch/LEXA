@@ -7,7 +7,6 @@ import DocumentScanner from './pages/DocumentScanner'
 import FIRGenerator from './pages/FIRGenerator'
 import LegalNotice from './pages/LegalNotice'
 import CaseFinder from './pages/CaseFinder'
-import TextEffect from './components/motion/TextEffect'
 
 const navItems = [
   ['/advisor', 'Legal Advice'],
@@ -64,12 +63,19 @@ function Navbar() {
 
 function Home() {
   return (
-    <main className="hero" style={{ minHeight: '100vh', paddingTop: '8rem', justifyContent: 'flex-start' }}>
-      <p className="page-eyebrow">Indian law, made understandable</p>
-      <TextEffect className="hero__heading">Your AI Legal Advisor</TextEffect>
-      <p className="hero__subheading">
-        Practical guidance on Indian law — from legal questions and document review to FIR drafts, notices, and court judgments.
-      </p>
+    <main className="hero">
+      <header className="hero__intro">
+        <p className="hero__eyebrow"><span aria-hidden="true" />Built for Indian law</p>
+        <h1 className="hero__heading">Understand your position.<br />Prepare your next step.</h1>
+        <p className="hero__subheading">
+          Ask a legal question, review a document, or prepare a first draft. Lexa helps you organise the facts before you speak with a lawyer.
+        </p>
+        <div className="hero__scope" aria-label="Lexa capabilities">
+          <span>Legal guidance</span>
+          <span>Document review</span>
+          <span>Draft preparation</span>
+        </div>
+      </header>
       <div className="tool-grid">
         {tools.map(({ path, title, copy, icon: Icon, featured }) => (
           <Link key={path} className={`tool-card${featured ? ' tool-card--featured' : ''}`} to={path}>
