@@ -7,6 +7,7 @@ import DocumentScanner from './pages/DocumentScanner'
 import FIRGenerator from './pages/FIRGenerator'
 import LegalNotice from './pages/LegalNotice'
 import CaseFinder from './pages/CaseFinder'
+import ThemeToggle from './components/ThemeToggle'
 
 const navItems = [
   ['/advisor', 'Legal Advice'],
@@ -29,7 +30,7 @@ function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   return (
-    <nav className="navbar" aria-label="Main navigation" style={{ position: 'fixed', inset: '0 0 auto', zIndex: 100, background: 'rgba(10, 10, 15, 0.94)', backdropFilter: 'blur(14px)' }}>
+    <nav className="navbar" aria-label="Main navigation">
       <Link className="navbar__logo" to="/" aria-label="Lexa home">LEXA</Link>
       <div className="navbar__links" style={{ overflowX: 'auto' }}>
         {navItems.map(([path, label]) => (
@@ -44,6 +45,7 @@ function Navbar() {
           </Link>
         ))}
       </div>
+      <ThemeToggle className="theme-toggle--desktop" />
       <button type="button" className="mobile-menu-button" onClick={() => setMenuOpen((open) => !open)} aria-expanded={menuOpen} aria-controls="mobile-navigation" aria-label={menuOpen ? 'Close navigation' : 'Open navigation'}>
         {menuOpen ? <X size={20} /> : <Menu size={20} />}
       </button>
@@ -53,6 +55,7 @@ function Navbar() {
             <motion.button className="mobile-drawer-backdrop" type="button" aria-label="Close navigation" onClick={() => setMenuOpen(false)} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} />
             <motion.div id="mobile-navigation" className="mobile-drawer" initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 24 }} transition={{ duration: .18, ease: 'easeOut' }}>
               {navItems.map(([path, label]) => <Link key={path} to={path} onClick={() => setMenuOpen(false)} aria-current={location.pathname === path ? 'page' : undefined}>{label}</Link>)}
+              <ThemeToggle className="theme-toggle--mobile" />
             </motion.div>
           </>
         )}

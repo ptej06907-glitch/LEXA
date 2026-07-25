@@ -29,9 +29,9 @@ export default function Button({
 
   const variants = {
     primary: `
-      bg-[var(--color-gold)] text-black
+      bg-[var(--color-primary-action)] text-[var(--color-on-primary)]
       shadow-[0_2px_8px_rgba(201,168,76,0.15)]
-      enabled:hover:bg-[var(--color-accent-hover)] enabled:hover:border-[var(--color-gold)] enabled:hover:text-[var(--color-bg)]
+      enabled:hover:bg-[var(--color-primary-action-hover)] enabled:hover:border-[var(--color-primary-action)] enabled:hover:text-[var(--color-on-primary)]
       focus-visible:outline-[var(--color-gold)]
     `,
     secondary: `
