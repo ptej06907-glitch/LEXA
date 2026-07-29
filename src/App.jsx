@@ -70,7 +70,11 @@ function Home() {
   const reveal = reduceMotion
     ? { hidden: { opacity: 1 }, visible: { opacity: 1 } }
     : { hidden: { opacity: 0, y: 18 }, visible: { opacity: 1, y: 0, transition: { duration: .48, ease: [0.22, 1, 0.36, 1] } } }
+  const optionReveal = reduceMotion
+    ? { hidden: { opacity: 1 }, visible: { opacity: 1 } }
+    : { hidden: { opacity: 0, y: 32, scale: .985 }, visible: { opacity: 1, y: 0, scale: 1, transition: { duration: .52, ease: [0.22, 1, 0.36, 1] } } }
   const sequence = { hidden: {}, visible: { transition: { staggerChildren: reduceMotion ? 0 : .07, delayChildren: reduceMotion ? 0 : .08 } } }
+  const scrollViewport = { once: false, amount: .28 }
 
   return (
     <motion.main className="home" initial="hidden" animate="visible" variants={sequence}>
@@ -84,7 +88,7 @@ function Home() {
           <h1 id="home-title">Legal work begins with a clear record.</h1>
           <p>Turn an uncertain situation into organised facts, a reviewable draft, or a focused line of legal research.</p>
         </motion.header>
-        <motion.div variants={reveal}>
+        <motion.div className="scroll-reveal" initial="hidden" animate="hidden" whileInView="visible" viewport={scrollViewport} variants={optionReveal}>
           <Link className="case-feature" to="/advisor">
             <span className="case-feature__top"><small>01 / Advisory</small><ArrowRight size={19} aria-hidden="true" /></span>
             <span className="case-feature__body"><strong>Start with your situation</strong><small>Describe what happened. Lexa will help identify the issues and practical next steps.</small></span>
@@ -104,9 +108,9 @@ function Home() {
           <div><p className="section-label">Matter index</p><h2 id="services-title">Select a legal task</h2></div>
           <span>Four focused workspaces</span>
         </motion.header>
-        <motion.div className="case-docket__list" variants={sequence}>
+        <motion.div className="case-docket__list" initial="hidden" animate="hidden" whileInView="visible" viewport={scrollViewport} variants={sequence}>
           {tools.slice(1).map(({ number, group, path, title, copy }) => (
-            <motion.div key={path} variants={reveal}>
+            <motion.div className="scroll-reveal" key={path} variants={optionReveal}>
               <Link className="docket-row" to={path}>
                 <span className="docket-row__number">{number}</span>
                 <span className="docket-row__group">{group}</span>
