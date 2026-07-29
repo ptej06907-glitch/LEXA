@@ -28,7 +28,7 @@ export default function ThemeToggle({ className = '' }) {
       title={`Switch to ${isDark ? 'light' : 'dark'} theme`}
     >
       {isDark ? <Sun size={17} aria-hidden="true" /> : <Moon size={17} aria-hidden="true" />}
-      <span>{isDark ? 'Light' : 'Dark'}</span>
+      <span className="theme-toggle__label">{isDark ? 'Light' : 'Dark'} mode</span>
     </button>
   )
 }

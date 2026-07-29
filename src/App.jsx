@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from 'motion/react'
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { useState } from 'react'
 import { BrowserRouter, Link, Route, Routes, useLocation } from 'react-router-dom'
 import { ArrowRight, Menu, ShieldCheck, X } from 'lucide-react'
@@ -41,7 +41,8 @@ function Navbar() {
             style={{ padding: '.4rem .55rem', whiteSpace: 'nowrap' }}
             aria-current={location.pathname === path ? 'page' : undefined}
           >
-            {label}
+            <span>{label}</span>
+            {location.pathname === path && <motion.span className="navbar__active-line" layoutId="navbar-active" transition={{ duration: .2, ease: 'easeOut' }} />}
           </Link>
         ))}
       </div>
@@ -65,43 +66,63 @@ function Navbar() {
 }
 
 function Home() {
+  const reduceMotion = useReducedMotion()
+  const reveal = reduceMotion
+    ? { hidden: { opacity: 1 }, visible: { opacity: 1 } }
+    : { hidden: { opacity: 0, y: 18 }, visible: { opacity: 1, y: 0, transition: { duration: .48, ease: [0.22, 1, 0.36, 1] } } }
+  const sequence = { hidden: {}, visible: { transition: { staggerChildren: reduceMotion ? 0 : .07, delayChildren: reduceMotion ? 0 : .08 } } }
+
   return (
-    <main className="home">
-      <section className="home__opening" aria-labelledby="home-title">
-        <header className="home__intro">
-          <p className="home__kicker">Lexa · Indian legal tools</p>
-          <h1 id="home-title">A practical starting point for legal matters.</h1>
-          <p>Understand an issue, examine a document, or organise a first draft before consulting a legal professional.</p>
-        </header>
-        <Link className="home__primary-action" to="/advisor">
-          <span><small>Not sure where to begin?</small><strong>Start with legal guidance</strong></span>
-          <ArrowRight size={20} aria-hidden="true" />
-        </Link>
+    <motion.main className="home" initial="hidden" animate="visible" variants={sequence}>
+      <motion.div className="home__masthead" variants={reveal}>
+        <span>LEXA / LEGAL DESK</span><span>IND · 2026</span><span className="home__status"><i />Systems available</span>
+      </motion.div>
+
+      <section className="case-hero" aria-labelledby="home-title">
+        <motion.header className="case-hero__intro" variants={reveal}>
+          <p className="section-label">AI-assisted Indian legal workspace</p>
+          <h1 id="home-title">Legal work begins with a clear record.</h1>
+          <p>Turn an uncertain situation into organised facts, a reviewable draft, or a focused line of legal research.</p>
+        </motion.header>
+        <motion.div variants={reveal}>
+          <Link className="case-feature" to="/advisor">
+            <span className="case-feature__top"><small>01 / Advisory</small><ArrowRight size={19} aria-hidden="true" /></span>
+            <span className="case-feature__body"><strong>Start with your situation</strong><small>Describe what happened. Lexa will help identify the issues and practical next steps.</small></span>
+            <span className="case-feature__footer">Open legal advisor <i aria-hidden="true" /></span>
+          </Link>
+        </motion.div>
       </section>
 
-      <section className="service-index" aria-labelledby="services-title">
-        <header className="service-index__header">
-          <div><p className="section-label">Services</p><h2 id="services-title">Choose a starting point</h2></div>
-          <p>Each tool guides you through the information needed for that task.</p>
-        </header>
-        <div className="service-index__list">
-          {tools.map(({ number, group, path, title, copy }) => (
-            <Link key={path} className="service-row" to={path}>
-              <span className="service-row__number">{number}</span>
-              <span className="service-row__group">{group}</span>
-              <h3>{title}</h3>
-              <p>{copy}</p>
-              <ArrowRight className="service-row__arrow" size={18} aria-hidden="true" />
-            </Link>
+      <motion.dl className="home__facts" variants={reveal}>
+        <div><dt>Jurisdiction</dt><dd>India</dd></div>
+        <div><dt>Workspace</dt><dd>Guidance · Drafting · Research</dd></div>
+        <div><dt>Review standard</dt><dd>Verify with qualified counsel</dd></div>
+      </motion.dl>
+
+      <section className="case-docket" aria-labelledby="services-title">
+        <motion.header className="case-docket__header" variants={reveal}>
+          <div><p className="section-label">Matter index</p><h2 id="services-title">Select a legal task</h2></div>
+          <span>Four focused workspaces</span>
+        </motion.header>
+        <motion.div className="case-docket__list" variants={sequence}>
+          {tools.slice(1).map(({ number, group, path, title, copy }) => (
+            <motion.div key={path} variants={reveal}>
+              <Link className="docket-row" to={path}>
+                <span className="docket-row__number">{number}</span>
+                <span className="docket-row__group">{group}</span>
+                <span className="docket-row__content"><strong>{title}</strong><small>{copy}</small></span>
+                <span className="docket-row__action">Open file <ArrowRight size={16} aria-hidden="true" /></span>
+              </Link>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </section>
 
-      <aside className="home__notice" aria-label="Important information">
+      <motion.aside className="home__notice" aria-label="Important information" variants={reveal}>
         <ShieldCheck size={17} aria-hidden="true" />
         <div><strong>Designed to help you prepare</strong><p>Lexa provides general legal information and drafting assistance. Verify important decisions and documents with a qualified lawyer.</p></div>
-      </aside>
-    </main>
+      </motion.aside>
+    </motion.main>
   )
 }
 
