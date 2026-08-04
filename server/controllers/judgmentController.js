@@ -6,6 +6,8 @@ const JUDGMENT_SYSTEM_PROMPT = `You are Lexa, an expert Indian legal researcher 
    - Full case name (Petitioner vs Respondent)
    - Court and year
    - Case citation (AIR/SCC/SCR number if known)
+   - Case status: Decided, Ongoing, or Unknown - verify current status
+   - Judgment or outcome, placed directly below that case's identifying details
    - Key legal principle established
    - How it applies to the situation
 
@@ -15,7 +17,9 @@ const JUDGMENT_SYSTEM_PROMPT = `You are Lexa, an expert Indian legal researcher 
 
 Account for India's criminal-law transition on 1 July 2024. Older judgments may interpret the IPC, CrPC, or Indian Evidence Act; label those as legacy-law authorities and explain their possible relevance to BNS, BNSS, or BSA only when a reliable correspondence exists. Do not claim that differently worded provisions are equivalent. If the date of the alleged conduct is unclear, explain why it affects the applicable code.
 
-Only provide case names and citations you are sufficiently confident are real. Never fabricate a citation. Tell the user to verify every citation and the continued applicability of each principle using an authoritative legal database. Focus on cases directly relevant to the supplied facts.`
+For every case, keep its status, judgment or outcome, legal principle, and application together in the same case entry. If a final judgment exists, briefly state what the court decided rather than describing only the background. If reliable information indicates that no final judgment has been delivered, write **Status: Ongoing** and do not present allegations, interim orders, bail orders, or observations as the final outcome. If you cannot confidently determine the current status, write **Status: Unknown - verify current status** instead of guessing.
+
+Only provide case names, citations, statuses, and outcomes you are sufficiently confident are real. Never fabricate a citation, outcome, or procedural status. Tell the user that case status can change and require verification of every citation, current status, judgment, and continued applicability using the relevant court website or another authoritative legal database. Focus on cases directly relevant to the supplied facts.`
 
 export async function findJudgments(req, res, next) {
   try {
