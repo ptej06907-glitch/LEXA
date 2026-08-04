@@ -48,7 +48,7 @@ export default function LegalAdvisor() {
       <header className="page-header">
         <p className="page-eyebrow">Ask Lexa</p>
         <h1 className="page-title">Legal Advisor</h1>
-        <p className="page-subtitle">Describe your situation and Lexa will provide information based on Indian law — IPC, CrPC, the Constitution, and more.</p>
+        <p className="page-subtitle">Describe your situation and Lexa will identify potentially relevant current or legacy Indian laws based on when the events occurred.</p>
       </header>
 
       <section className="form-section" aria-labelledby="advisor-category-label">
@@ -74,7 +74,7 @@ export default function LegalAdvisor() {
               if (situation.trim() && !loading) handleSubmit()
             }
           }}
-          placeholder="Describe your legal situation in detail..."
+          placeholder="Describe what happened, including the date or period when it occurred..."
           rows={1}
           maxLength={2000}
         />
@@ -88,7 +88,7 @@ export default function LegalAdvisor() {
         <article className="result-card">
           <div className="result-header"><h2 className="result-title">Legal Advice</h2></div>
           <div className="result-content"><ReactMarkdown>{DOMPurify.sanitize(advice)}</ReactMarkdown></div>
-          <p className="result-disclaimer">This is AI-generated legal information, not professional legal advice. Consult a qualified lawyer for your specific situation.</p>
+          <p className="result-disclaimer">AI-generated legal information, not professional advice. Verify every provision and confirm whether current or legacy law applies with a qualified lawyer.</p>
         </article>
       )}
     </main>

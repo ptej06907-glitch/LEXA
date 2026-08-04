@@ -49,14 +49,14 @@ export default function CaseFinder() {
         <aside className="research-filters" aria-labelledby="case-category-label"><span className="field-label" id="case-category-label">Research area</span><div className="pill-group">{CATEGORIES.map((cat) => <button key={cat} type="button" className="choice-pill" aria-pressed={category === cat} disabled={loading} onClick={() => setCategory(cat)}>{cat}</button>)}</div></aside>
         <div className="composer">
           <label className="field-label" htmlFor="case-situation">Case question or situation</label>
-          <textarea id="case-situation" ref={textareaRef} className="field-control auto-textarea" value={situation} onChange={(e) => { setSituation(e.target.value); resize(e.target) }} onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (situation.trim() && !loading) handleFind() } }} placeholder="Describe the legal issue, facts, or principle you want precedents for..." rows={1} maxLength={3000} />
+          <textarea id="case-situation" ref={textareaRef} className="field-control auto-textarea" value={situation} onChange={(e) => { setSituation(e.target.value); resize(e.target) }} onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (situation.trim() && !loading) handleFind() } }} placeholder="Describe the issue and include when the relevant events occurred..." rows={1} maxLength={3000} />
           <div className="composer__footer"><span className="composer__hint">Searches Supreme Court and High Court precedents · {situation.length}/3000</span><Button onClick={handleFind} disabled={!situation.trim()} loading={loading}><Search size={16} /> Find cases</Button></div>
         </div>
       </div>
 
       {error && <div className="alert-error" role="alert" style={{ marginTop: 'var(--space-lg)' }}>{error}</div>}
       {loading && <LoadingState label="Researching relevant judgments" detail="Comparing the facts with landmark Supreme Court and High Court decisions." />}
-      {judgments && <article className="result-card"><div className="result-header"><h2 className="result-title">Relevant Judgments</h2></div><div className="result-content"><ReactMarkdown>{DOMPurify.sanitize(judgments)}</ReactMarkdown></div><p className="result-disclaimer">Always verify case citations on Indian Kanoon before using them in court proceedings.</p></article>}
+      {judgments && <article className="result-card"><div className="result-header"><h2 className="result-title">Relevant Judgments</h2></div><div className="result-content"><ReactMarkdown>{DOMPurify.sanitize(judgments)}</ReactMarkdown></div><p className="result-disclaimer">Verify every citation and confirm whether a legacy-law judgment remains applicable under the current statute before relying on it.</p></article>}
     </main>
   )
 }

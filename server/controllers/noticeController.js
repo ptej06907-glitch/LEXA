@@ -16,7 +16,9 @@ The notice must include:
    - Consequences of non-compliance
 6) **Closing** — Formal closing with signature block
 
-Use formal legal language. Cite specific Indian laws. Make it ready to send.`
+When criminal-law provisions are relevant, use BNS, BNSS, and BSA for matters governed by the laws in force from 1 July 2024. For alleged conduct before that date, use the IPC and other saved legacy provisions where appropriate. If the relevant date is missing or unclear, say that applicability depends on the date rather than guessing. Do not assume an IPC provision and a BNS provision are identical, and never invent a statutory cross-reference.
+
+Use formal legal language. Give the full Act name and section only when sufficiently confident; otherwise flag it for verification. Make it a draft for legal review before sending.`
 
 export async function generateNotice(req, res, next) {
   try {

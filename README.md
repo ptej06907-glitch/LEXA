@@ -23,6 +23,12 @@ Lexa is a full-stack web application that helps users understand legal situation
 - **Light and Dark Themes** — Switch between a warm, paper-inspired light theme and the original dark theme. The preference persists between visits.
 - **Responsive Workflows** — Includes auto-expanding text areas, keyboard submission, loading states, disabled-state protection, visible keyboard focus, mobile navigation, page transitions, and clear document review layouts.
 
+## Criminal-Law Date Handling
+
+The Bharatiya Nyaya Sanhita, 2023 (BNS), Bharatiya Nagarik Suraksha Sanhita, 2023 (BNSS), and Bharatiya Sakshya Adhiniyam, 2023 (BSA) came into force on 1 July 2024. Lexa asks users to provide relevant event dates so its AI instructions can distinguish the current framework from saved legacy provisions under the IPC, CrPC, and Indian Evidence Act.
+
+Lexa does not treat old and new section numbers as automatically equivalent. Missing dates, statutory mappings, generated provisions, and case citations must be independently verified before use.
+
 ## Interface Direction
 
 Lexa uses an editorial legal-reference design rather than a generic dashboard. The homepage presents its tools as a numbered service directory grouped into **Understand**, **Prepare**, and **Research**. The design system is built from CSS custom properties and preserves the same typography and restrained gold accent across both themes.
@@ -203,7 +209,7 @@ The frontend receives the Render service URL through `VITE_API_URL`. The backend
 
 ## Disclaimer
 
-Lexa provides AI-generated legal information for educational and preparatory purposes. Outputs may be incomplete or incorrect and are not a substitute for professional legal advice. Have a qualified lawyer review important decisions, FIR drafts, notices, and documents. Verify case citations using authoritative legal sources before relying on them in court or formal proceedings.
+Lexa provides AI-generated legal information for educational and preparatory purposes. Outputs may be incomplete or incorrect and are not a substitute for professional legal advice. Have a qualified lawyer review important decisions, FIR drafts, notices, and documents. Verify statutory provisions, whether current or legacy law applies, and every case citation using authoritative legal sources before relying on them in court or formal proceedings.
 
 ---
 
