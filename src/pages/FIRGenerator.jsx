@@ -76,10 +76,11 @@ export default function FIRGenerator() {
 
   return (
     <main className="page-shell">
-      <header className="page-header"><p className="page-eyebrow">Guided complaint builder</p><h1 className="page-title">FIR Draft Generator</h1><p className="page-subtitle">Build a structured complaint one step at a time. You can review every detail before Lexa drafts the FIR.</p></header>
+      <header className="page-header"><p className="page-eyebrow">Guided complaint builder</p><h1 className="page-title">FIR Draft Generator</h1><p className="page-subtitle">Build a structured complaint one step at a time. You can review every detail before Lexa drafts the FIR.</p><div className="page-header__folio"><span>Workspace 03</span><span>Complaint preparation</span><span>3-stage record</span></div></header>
       <Stepper steps={STEPS} currentStep={step} />
 
       <div className="workflow-panel">
+        <div className="workflow-panel__meta"><span>FIR preparation record</span><small>Stage {step + 1} / {STEPS.length}</small></div>
         <AnimatePresence mode="wait" initial={false}>
           <motion.div key={step} initial={{ opacity: 0, x: 8 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -8 }} transition={{ duration: .16 }}>
             {step === 0 && <><h2 className="workflow-panel__heading">Start with the incident details</h2><p className="workflow-panel__copy">Include the incident date whenever possible—it helps determine whether the BNS or legacy IPC framework may apply.</p><section className="form-section" aria-labelledby="fir-category-label"><span className="field-label" id="fir-category-label">Incident type</span><div className="pill-group">{CATEGORIES.map((cat) => <button key={cat} type="button" className="choice-pill" aria-pressed={category === cat} onClick={() => setCategory(cat)}>{cat}</button>)}</div></section><div className="field-grid"><div><label className="field-label" htmlFor="fir-location">Location</label><input id="fir-location" className="field-control" type="text" value={location} onChange={(e) => setLocation(e.target.value)} placeholder="e.g. Hyderabad, Telangana" /></div><div><label className="field-label" htmlFor="fir-date">Incident date</label><input id="fir-date" className="field-control" type="date" value={date} onChange={(e) => setDate(e.target.value)} /></div></div></>}

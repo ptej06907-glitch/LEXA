@@ -31,14 +31,16 @@ function Navbar() {
 
   return (
     <nav className="navbar" aria-label="Main navigation">
-      <Link className="navbar__logo" to="/" aria-label="Lexa home">LEXA</Link>
-      <div className="navbar__links" style={{ overflowX: 'auto' }}>
+      <Link className="navbar__logo" to="/" aria-label="Lexa home">
+        <span className="navbar__logo-mark">LEXA</span>
+        <span className="navbar__logo-subtitle">Indian legal workspace</span>
+      </Link>
+      <div className="navbar__links">
         {navItems.map(([path, label]) => (
           <Link
             key={path}
             to={path}
             className={`navbar__link nav-link${location.pathname === path ? ' navbar__link--active' : ''}`}
-            style={{ padding: '.4rem .55rem', whiteSpace: 'nowrap' }}
             aria-current={location.pathname === path ? 'page' : undefined}
           >
             <span>{label}</span>
@@ -46,7 +48,10 @@ function Navbar() {
           </Link>
         ))}
       </div>
-      <ThemeToggle className="theme-toggle--desktop" />
+      <div className="navbar__tools">
+        <span className="navbar__jurisdiction">IND / LEGAL</span>
+        <ThemeToggle className="theme-toggle--desktop" />
+      </div>
       <button type="button" className="mobile-menu-button" onClick={() => setMenuOpen((open) => !open)} aria-expanded={menuOpen} aria-controls="mobile-navigation" aria-label={menuOpen ? 'Close navigation' : 'Open navigation'}>
         {menuOpen ? <X size={20} /> : <Menu size={20} />}
       </button>
@@ -55,7 +60,8 @@ function Navbar() {
           <>
             <motion.button className="mobile-drawer-backdrop" type="button" aria-label="Close navigation" onClick={() => setMenuOpen(false)} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} />
             <motion.div id="mobile-navigation" className="mobile-drawer" initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 24 }} transition={{ duration: .18, ease: 'easeOut' }}>
-              {navItems.map(([path, label]) => <Link key={path} to={path} onClick={() => setMenuOpen(false)} aria-current={location.pathname === path ? 'page' : undefined}>{label}</Link>)}
+              <div className="mobile-drawer__header"><span>Lexa registry</span><small>Select a workspace</small></div>
+              {navItems.map(([path, label]) => <Link key={path} to={path} onClick={() => setMenuOpen(false)} aria-current={location.pathname === path ? 'page' : undefined}><span>{label}</span></Link>)}
               <ThemeToggle className="theme-toggle--mobile" />
             </motion.div>
           </>
@@ -84,13 +90,13 @@ function Home() {
 
       <section className="case-hero" aria-labelledby="home-title">
         <motion.header className="case-hero__intro" variants={reveal}>
-          <p className="section-label">AI-assisted Indian legal workspace</p>
-          <h1 id="home-title">Legal work begins with a clear record.</h1>
-          <p>Turn an uncertain situation into organised facts, a reviewable draft, or a focused line of legal research.</p>
+          <p className="section-label">Indian legal preparation workspace</p>
+          <h1 id="home-title">Make the facts legible. Prepare the next move.</h1>
+          <p>Move from an uncertain account to organised facts, a reviewable draft, or a focused line of legal research.</p>
         </motion.header>
         <motion.div className="scroll-reveal" initial="hidden" animate="hidden" whileInView="visible" viewport={scrollViewport} variants={optionReveal}>
           <Link className="case-feature" to="/advisor">
-            <span className="case-feature__top"><small>01 / Advisory</small><ArrowRight size={19} aria-hidden="true" /></span>
+            <span className="case-feature__top"><small>Matter 01 / Advisory</small><span className="case-feature__seal">LEXA</span><ArrowRight size={19} aria-hidden="true" /></span>
             <span className="case-feature__body"><strong>Start with your situation</strong><small>Describe what happened. Lexa will help identify the issues and practical next steps.</small></span>
             <span className="case-feature__footer">Open legal advisor <i aria-hidden="true" /></span>
           </Link>
@@ -106,7 +112,7 @@ function Home() {
       <section className="case-docket" aria-labelledby="services-title">
         <motion.header className="case-docket__header" variants={reveal}>
           <div><p className="section-label">Matter index</p><h2 id="services-title">Select a legal task</h2></div>
-          <span>Four focused workspaces</span>
+          <span>Registry / 04 workspaces</span>
         </motion.header>
         <motion.div className="case-docket__list" initial="hidden" animate="hidden" whileInView="visible" viewport={scrollViewport} variants={sequence}>
           {tools.slice(1).map(({ number, group, path, title, copy }) => (
@@ -115,7 +121,7 @@ function Home() {
                 <span className="docket-row__number">{number}</span>
                 <span className="docket-row__group">{group}</span>
                 <span className="docket-row__content"><strong>{title}</strong><small>{copy}</small></span>
-                <span className="docket-row__action">Open file <ArrowRight size={16} aria-hidden="true" /></span>
+                <span className="docket-row__action">Open matter <ArrowRight size={16} aria-hidden="true" /></span>
               </Link>
             </motion.div>
           ))}
@@ -142,7 +148,7 @@ function AnimatedRoutes() {
 
   return (
     <AnimatePresence mode="wait" initial={false}>
-      <motion.div key={location.pathname} {...transition} style={{ minHeight: '100vh' }}>
+      <motion.div className="route-stage" key={location.pathname} {...transition}>
         <Routes location={location}>
           <Route path="/" element={<Home />} />
           <Route path="/advisor" element={<LegalAdvisor />} />

@@ -74,10 +74,11 @@ export default function LegalNotice() {
 
   return (
     <main className="page-shell">
-      <header className="page-header"><p className="page-eyebrow">Guided formal correspondence</p><h1 className="page-title">Legal Notice Generator</h1><p className="page-subtitle">Define the notice, explain the dispute, and review the facts before Lexa prepares the formal draft.</p></header>
+      <header className="page-header"><p className="page-eyebrow">Guided formal correspondence</p><h1 className="page-title">Legal Notice Generator</h1><p className="page-subtitle">Define the notice, explain the dispute, and review the facts before Lexa prepares the formal draft.</p><div className="page-header__folio"><span>Workspace 04</span><span>Formal correspondence</span><span>3-stage record</span></div></header>
       <Stepper steps={STEPS} currentStep={step} />
 
       <div className="workflow-panel">
+        <div className="workflow-panel__meta"><span>Notice preparation record</span><small>Stage {step + 1} / {STEPS.length}</small></div>
         <AnimatePresence mode="wait" initial={false}>
           <motion.div key={step} initial={{ opacity: 0, x: 8 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -8 }} transition={{ duration: .16 }}>
             {step === 0 && <><h2 className="workflow-panel__heading">Set up the notice</h2><p className="workflow-panel__copy">Choose the closest purpose and recipient. Lexa will use these to shape the tone and legal structure.</p><section className="form-section" aria-labelledby="notice-type-label"><span className="field-label" id="notice-type-label">Notice type</span><div className="pill-group">{NOTICE_TYPES.map((type) => <button key={type} type="button" className="choice-pill" aria-pressed={noticeType === type} onClick={() => setNoticeType(type)}>{type}</button>)}</div></section><section aria-labelledby="recipient-type-label"><span className="field-label" id="recipient-type-label">Sending notice to</span><div className="pill-group">{RECIPIENT_TYPES.map((type) => <button key={type} type="button" className="choice-pill" aria-pressed={recipientType === type} onClick={() => setRecipientType(type)}>{type}</button>)}</div></section></>}

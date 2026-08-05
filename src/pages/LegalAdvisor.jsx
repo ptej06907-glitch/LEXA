@@ -49,6 +49,7 @@ export default function LegalAdvisor() {
         <p className="page-eyebrow">Ask Lexa</p>
         <h1 className="page-title">Legal Advisor</h1>
         <p className="page-subtitle">Describe your situation and Lexa will identify potentially relevant current or legacy Indian laws based on when the events occurred.</p>
+        <div className="page-header__folio"><span>Workspace 01</span><span>Guidance record</span><span>Review required</span></div>
       </header>
 
       <section className="form-section" aria-labelledby="advisor-category-label">
@@ -61,6 +62,7 @@ export default function LegalAdvisor() {
       </section>
 
       <div className="composer">
+        <div className="composer__masthead"><span>Situation record</span><small>02 / Facts and context</small></div>
         <label className="field-label" htmlFor="legal-situation">Your situation</label>
         <textarea
           id="legal-situation"
@@ -86,7 +88,7 @@ export default function LegalAdvisor() {
 
       {advice && (
         <article className="result-card">
-          <div className="result-header"><h2 className="result-title">Legal Advice</h2></div>
+          <div className="result-header"><h2 className="result-title">Legal Advice</h2><span className="result-reference">Preliminary guidance / verify provisions</span></div>
           <div className="result-content"><ReactMarkdown>{DOMPurify.sanitize(advice)}</ReactMarkdown></div>
           <p className="result-disclaimer">AI-generated legal information, not professional advice. Verify every provision and confirm whether current or legacy law applies with a qualified lawyer.</p>
         </article>

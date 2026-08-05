@@ -4,10 +4,11 @@ export default function ResultDocument({ title, badge = 'AI draft', actions, chi
   return (
     <section className="document-workspace" aria-labelledby="document-result-title">
       <div className="document-toolbar">
-        <div className="document-toolbar__title"><FileText size={18} aria-hidden="true" /><div><span>Generated document</span><strong id="document-result-title">{title}</strong></div></div>
+        <div className="document-toolbar__title"><span className="document-toolbar__icon"><FileText size={17} aria-hidden="true" /></span><div><span>Prepared draft / review required</span><strong id="document-result-title">{title}</strong></div></div>
         <div className="result-actions">{actions}</div>
       </div>
       <article className="legal-paper">
+        <div className="legal-paper__masthead"><span>LEXA / LEGAL DOCUMENT</span><span>INDIA</span></div>
         <span className="legal-paper__badge">{badge}</span>
         <div className="legal-paper__content">{children}</div>
         {disclaimer && <p className="legal-paper__disclaimer">{disclaimer}</p>}

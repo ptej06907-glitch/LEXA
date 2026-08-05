@@ -27,8 +27,9 @@ export default function ThemeToggle({ className = '' }) {
       aria-label={`Switch to ${isDark ? 'light' : 'dark'} theme`}
       title={`Switch to ${isDark ? 'light' : 'dark'} theme`}
     >
-      {isDark ? <Sun size={17} aria-hidden="true" /> : <Moon size={17} aria-hidden="true" />}
-      <span className="theme-toggle__label">{isDark ? 'Light' : 'Dark'} mode</span>
+      <span className="theme-toggle__glyph" aria-hidden="true">{isDark ? <Sun size={15} /> : <Moon size={15} />}</span>
+      <span className="theme-toggle__label">{isDark ? 'Light' : 'Dark'}</span>
+      <span className="theme-toggle__state" aria-hidden="true">{isDark ? 'D' : 'L'}</span>
     </button>
   )
 }

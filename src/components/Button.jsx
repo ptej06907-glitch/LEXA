@@ -59,15 +59,16 @@ export default function Button({
       onClick={isDisabled ? undefined : onClick}
       disabled={isDisabled}
       aria-busy={loading}
+      data-loading={loading || undefined}
       className={`lexa-button ${variantClasses[variant]} ${base} ${variants[variant]} ${className}`}
       {...props}
     >
       {loading ? (
-        <>
+        <span className="lexa-button__content lexa-button__content--loading">
           <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-          <span>Loading...</span>
-        </>
-      ) : children}
+          <span>Processing</span>
+        </span>
+      ) : <span className="lexa-button__content">{children}</span>}
     </button>
   )
 }

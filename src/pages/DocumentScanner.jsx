@@ -66,7 +66,7 @@ export default function DocumentScanner() {
 
   return (
     <main className="page-shell">
-      <header className="page-header"><p className="page-eyebrow">Review before you sign</p><h1 className="page-title">Document Scanner</h1><p className="page-subtitle">Upload a legal document and Lexa will identify red flags, unfair clauses, and potential risks.</p></header>
+      <header className="page-header"><p className="page-eyebrow">Review before you sign</p><h1 className="page-title">Document Scanner</h1><p className="page-subtitle">Upload a legal document and Lexa will identify red flags, unfair clauses, and potential risks.</p><div className="page-header__folio"><span>Workspace 02</span><span>Document intake</span><span>PDF / DOC / DOCX</span></div></header>
 
       <div
         className={`upload-zone${dragOver ? ' upload-zone--active' : ''}`}
@@ -81,15 +81,19 @@ export default function DocumentScanner() {
         aria-label={file ? `Selected ${file.name}. Choose a different document` : 'Choose a PDF or Word document'}
       >
         <input ref={fileInputRef} type="file" accept=".pdf,.doc,.docx" hidden disabled={loading} onChange={(e) => e.target.files[0] && handleFileSelect(e.target.files[0])} />
-        <div className="tool-card__icon" aria-hidden="true" style={{ margin: '0 auto var(--space-md)' }}>{file ? <FileCheck2 size={19} /> : <UploadCloud size={19} />}</div>
-        {file ? <><p style={{ color: 'var(--color-gold)', fontWeight: 650, margin: 0 }}>{file.name}</p><p style={{ color: 'var(--color-text-secondary)', fontSize: '.875rem', margin: '.25rem 0 0' }}>{(file.size / 1024 / 1024).toFixed(2)} MB — Click to change file</p></> : <><p style={{ fontWeight: 650, margin: 0 }}>Drop your document here or click to browse</p><p style={{ color: 'var(--color-text-secondary)', fontSize: '.875rem', margin: '.5rem 0 0' }}>PDF, DOC, or DOCX · Maximum 10MB</p></>}
+        <span className="upload-zone__reference" aria-hidden="true">INTAKE / 01</span>
+        <div className="tool-card__icon upload-zone__icon" aria-hidden="true">{file ? <FileCheck2 size={21} /> : <UploadCloud size={21} />}</div>
+        {file ? <><p className="upload-zone__title upload-zone__title--selected">{file.name}</p><p className="upload-zone__copy">{(file.size / 1024 / 1024).toFixed(2)} MB / Click to change file</p></> : <><p className="upload-zone__title">Drop your document here or click to browse</p><p className="upload-zone__copy">PDF, DOC, or DOCX / Maximum 10MB</p></>}
+        <span className="upload-zone__security">Private upload / validated file types</span>
       </div>
 
-      <div style={{ height: 'var(--space-lg)' }} />
-      {error && <div className="alert-error" role="alert">{error}</div>}
-      <Button onClick={handleScan} disabled={!file} loading={loading} fullWidth className="mb-8">Scan for Red Flags</Button>
+      <div className="scan-actions">
+        <span>Automated review / not a substitute for counsel</span>
+        {error && <div className="alert-error" role="alert">{error}</div>}
+        <Button onClick={handleScan} disabled={!file} loading={loading} fullWidth className="mb-8">Scan for Red Flags</Button>
+      </div>
       {loading && <LoadingState label="Reviewing your document" detail="Reading clauses, identifying risks, and checking for missing protections." />}
-      {analysis && <article className="result-card"><div className="result-header"><h2 className="result-title">Document Analysis</h2></div><div className="result-content"><ReactMarkdown>{DOMPurify.sanitize(analysis)}</ReactMarkdown></div><p className="result-disclaimer">This is AI-generated analysis. Have a lawyer review the document before signing.</p></article>}
+      {analysis && <article className="result-card"><div className="result-header"><h2 className="result-title">Document Analysis</h2><span className="result-reference">Risk review / preliminary</span></div><div className="result-content"><ReactMarkdown>{DOMPurify.sanitize(analysis)}</ReactMarkdown></div><p className="result-disclaimer">This is AI-generated analysis. Have a lawyer review the document before signing.</p></article>}
     </main>
   )
 }
