@@ -3,11 +3,14 @@ import ReactMarkdown from 'react-markdown'
 import DOMPurify from 'dompurify'
 import Button from '../components/Button'
 import LoadingState from '../components/LoadingState'
-import { ArrowUp } from 'lucide-react'
+import { ArrowUp, ShieldCheck } from 'lucide-react'
 import useAutoResizeTextarea from '../hooks/useAutoResizeTextarea'
 import { apiUrl } from '../lib/api'
 
 const CATEGORIES = ['Criminal', 'Civil', 'Consumer', 'Property', 'Employment', 'Family', 'Constitutional', 'General']
+const markdownComponents = {
+  a: ({ href, children }) => <a href={href} target="_blank" rel="noopener noreferrer">{children}</a>,
+}
 
 export default function LegalAdvisor() {
   const [situation, setSituation] = useState('')
@@ -52,6 +55,8 @@ export default function LegalAdvisor() {
         <div className="page-header__folio"><span>Workspace 01</span><span>Guidance record</span><span>Review required</span></div>
       </header>
 
+      <aside className="source-grounding-note"><ShieldCheck size={17} aria-hidden="true" /><div><strong>Grounded legal research</strong><p>Lexa searches allowlisted Indian government and court sources before answering. Open and verify the linked sources.</p></div></aside>
+
       <section className="form-section" aria-labelledby="advisor-category-label">
         <span className="field-label" id="advisor-category-label">Category</span>
         <div className="pill-group">
@@ -89,7 +94,7 @@ export default function LegalAdvisor() {
       {advice && (
         <article className="result-card">
           <div className="result-header"><h2 className="result-title">Legal Advice</h2><span className="result-reference">Preliminary guidance / verify provisions</span></div>
-          <div className="result-content"><ReactMarkdown>{DOMPurify.sanitize(advice)}</ReactMarkdown></div>
+          <div className="result-content"><ReactMarkdown components={markdownComponents}>{DOMPurify.sanitize(advice)}</ReactMarkdown></div>
           <p className="result-disclaimer">AI-generated legal information, not professional advice. Verify every provision and confirm whether current or legacy law applies with a qualified lawyer.</p>
         </article>
       )}

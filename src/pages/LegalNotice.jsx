@@ -15,6 +15,9 @@ import { apiUrl } from '../lib/api'
 const NOTICE_TYPES = ['Demand Notice', 'Cease and Desist', 'Eviction Notice', 'Employment Termination', 'Consumer Complaint', 'Defamation', 'Recovery of Money', 'Property Dispute']
 const RECIPIENT_TYPES = ['Individual', 'Company', 'Landlord', 'Tenant', 'Employer', 'Employee', 'Bank', 'Government Body']
 const STEPS = ['Notice setup', 'Your situation', 'Review']
+const markdownComponents = {
+  a: ({ href, children }) => <a href={href} target="_blank" rel="noopener noreferrer">{children}</a>,
+}
 
 export default function LegalNotice() {
   const [situation, setSituation] = useState('')
@@ -91,7 +94,7 @@ export default function LegalNotice() {
 
       {error && <div className="alert-error" role="alert" style={{ marginTop: 'var(--space-lg)' }}>{error}</div>}
       {loading && <LoadingState label="Drafting your legal notice" detail="Organizing the facts, demand, deadline, and relevant legal basis." />}
-      {notice && !loading && <ResultDocument title={noticeType} actions={<><Button onClick={handleCopy} variant="ghost"><Copy size={16} /> Copy</Button><Button onClick={handleDownloadPdf} loading={pdfLoading} variant="secondary"><Download size={16} /> PDF</Button></>} disclaimer="AI-generated draft. Have a qualified lawyer review it before sending and replace every blank with accurate information."><ReactMarkdown>{DOMPurify.sanitize(notice)}</ReactMarkdown></ResultDocument>}
+      {notice && !loading && <ResultDocument title={noticeType} actions={<><Button onClick={handleCopy} variant="ghost"><Copy size={16} /> Copy</Button><Button onClick={handleDownloadPdf} loading={pdfLoading} variant="secondary"><Download size={16} /> PDF</Button></>} disclaimer="AI-generated draft. Have a qualified lawyer review it before sending and replace every blank with accurate information."><ReactMarkdown components={markdownComponents}>{DOMPurify.sanitize(notice)}</ReactMarkdown></ResultDocument>}
       <Toast message={toast?.message} tone={toast?.tone} onDismiss={() => setToast(null)} />
     </main>
   )

@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "corpusVersion": "2026-08-07",
+  "generatedAt": "2026-08-07T13:04:12.799Z",
+  "chunkSize": 1800,
+  "chunkOverlap": 180,
+  "acts": [
+    {
+      "id": "bns",
+      "shortName": "BNS",
+      "title": "The Bharatiya Nyaya Sanhita, 2023",
+      "actNumber": "45 of 2023",
+      "effectiveDate": "2024-07-01",
+      "applicabilityNote": "The 23 February 2024 commencement notification excluded BNS section 106(2). Do not treat section 106(2) as in force unless a later official notification is retrieved and verified.",
+      "sourceAsOf": "2025-10-06",
+      "sourceUrl": "https://www.indiacode.nic.in/bitstream/123456789/20062/1/a202345.pdf",
+      "checksumSha256": "ff92dcc72778944011807644b6033b1140ddbe6d7e9f82ac32fd419dae03aa86",
+      "pageCount": 112,
+      "chunkCount": 311,
+      "characterCount": 429438
+    },
+    {
+      "id": "bnss",
+      "shortName": "BNSS",
+      "title": "The Bharatiya Nagarik Suraksha Sanhita, 2023",
+      "actNumber": "46 of 2023",
+      "effectiveDate": "2024-07-01",
+      "applicabilityNote": "The 23 February 2024 commencement notification excluded the BNSS First Schedule entry relating to BNS section 106(2). Verify any later official commencement notification before relying on that entry.",
+      "sourceAsOf": "2023-12-25",
+      "sourceUrl": "https://www.mha.gov.in/sites/default/files/250884_2_english_01042024.pdf",
+      "checksumSha256": "5e60e2afe30d0fe7eca4f8126301146b76c86a444e690581f81eb564843517fe",
+      "pageCount": 249,
+      "chunkCount": 587,
+      "characterCount": 815766
+    },
+    {
+      "id": "bsa",
+      "shortName": "BSA",
+      "title": "The Bharatiya Sakshya Adhiniyam, 2023",
+      "actNumber": "47 of 2023",
+      "effectiveDate": "2024-07-01",
+      "applicabilityNote": "The Act was brought into force on 1 July 2024 by notification S.O. 849(E) dated 23 February 2024.",
+      "sourceAsOf": "2023-12-25",
+      "sourceUrl": "https://www.mha.gov.in/sites/default/files/250882_english_01042024.pdf",
+      "checksumSha256": "13e2b6eb66add222c7262ccaa0b08d58e48ca22cdf0953f6541123ef039de239",
+      "pageCount": 47,
+      "chunkCount": 118,
+      "characterCount": 164475
+    }
+  ]
+}

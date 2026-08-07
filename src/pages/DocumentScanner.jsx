@@ -6,6 +6,10 @@ import LoadingState from '../components/LoadingState'
 import { FileCheck2, UploadCloud } from 'lucide-react'
 import { apiUrl } from '../lib/api'
 
+const markdownComponents = {
+  a: ({ href, children }) => <a href={href} target="_blank" rel="noopener noreferrer">{children}</a>,
+}
+
 export default function DocumentScanner() {
   const [file, setFile] = useState(null)
   const [analysis, setAnalysis] = useState('')
@@ -93,7 +97,7 @@ export default function DocumentScanner() {
         <Button onClick={handleScan} disabled={!file} loading={loading} fullWidth className="mb-8">Scan for Red Flags</Button>
       </div>
       {loading && <LoadingState label="Reviewing your document" detail="Reading clauses, identifying risks, and checking for missing protections." />}
-      {analysis && <article className="result-card"><div className="result-header"><h2 className="result-title">Document Analysis</h2><span className="result-reference">Risk review / preliminary</span></div><div className="result-content"><ReactMarkdown>{DOMPurify.sanitize(analysis)}</ReactMarkdown></div><p className="result-disclaimer">This is AI-generated analysis. Have a lawyer review the document before signing.</p></article>}
+      {analysis && <article className="result-card"><div className="result-header"><h2 className="result-title">Document Analysis</h2><span className="result-reference">Risk review / preliminary</span></div><div className="result-content"><ReactMarkdown components={markdownComponents}>{DOMPurify.sanitize(analysis)}</ReactMarkdown></div><p className="result-disclaimer">This is AI-generated analysis. Have a lawyer review the complete document before signing.</p></article>}
     </main>
   )
 }

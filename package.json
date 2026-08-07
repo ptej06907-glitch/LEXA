@@ -10,6 +10,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "test:security": "node server/securitySmokeTest.mjs",
+    "test:research": "node server/researchSafetyTest.mjs",
+    "corpus:build": "node server/scripts/buildLegalCorpus.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -31,7 +33,7 @@
     "mammoth": "^1.12.0",
     "motion": "^12.42.2",
     "multer": "^2.2.0",
-    "pdfreader": "^3.0.8",
+    "pdf-parse": "^2.4.5",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-markdown": "^10.1.0",

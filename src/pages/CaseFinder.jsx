@@ -3,11 +3,14 @@ import ReactMarkdown from 'react-markdown'
 import DOMPurify from 'dompurify'
 import Button from '../components/Button'
 import LoadingState from '../components/LoadingState'
-import { Search } from 'lucide-react'
+import { Search, ShieldCheck } from 'lucide-react'
 import { apiUrl } from '../lib/api'
 import useAutoResizeTextarea from '../hooks/useAutoResizeTextarea'
 
 const CATEGORIES = ['Criminal', 'Civil', 'Consumer', 'Property', 'Employment', 'Family', 'Constitutional', 'Cyber']
+const markdownComponents = {
+  a: ({ href, children }) => <a href={href} target="_blank" rel="noopener noreferrer">{children}</a>,
+}
 
 export default function CaseFinder() {
   const [situation, setSituation] = useState('')
@@ -45,6 +48,8 @@ export default function CaseFinder() {
     <main className="page-shell">
       <header className="page-header"><p className="page-eyebrow">Research precedents</p><h1 className="page-title">Landmark Case Finder</h1><p className="page-subtitle">Find relevant Supreme Court and High Court judgments that may support your legal situation.</p><div className="page-header__folio"><span>Workspace 05</span><span>Precedent research</span><span>Verify citations</span></div></header>
 
+      <aside className="source-grounding-note"><ShieldCheck size={17} aria-hidden="true" /><div><strong>Official-source retrieval</strong><p>Case names and citations are limited to retrieved court or government sources. Always open the source and confirm its status.</p></div></aside>
+
       <div className="research-layout">
         <aside className="research-filters" aria-labelledby="case-category-label"><div className="research-filters__meta"><span>Index</span><small>01 / Jurisdiction</small></div><span className="field-label" id="case-category-label">Research area</span><div className="pill-group">{CATEGORIES.map((cat) => <button key={cat} type="button" className="choice-pill" aria-pressed={category === cat} disabled={loading} onClick={() => setCategory(cat)}>{cat}</button>)}</div></aside>
         <div className="composer">
@@ -57,7 +62,7 @@ export default function CaseFinder() {
 
       {error && <div className="alert-error" role="alert" style={{ marginTop: 'var(--space-lg)' }}>{error}</div>}
       {loading && <LoadingState label="Researching relevant judgments" detail="Comparing the facts with landmark Supreme Court and High Court decisions." />}
-      {judgments && <article className="result-card"><div className="result-header"><h2 className="result-title">Relevant Judgments</h2><span className="result-reference">Research return / citation check required</span></div><div className="result-content"><ReactMarkdown>{DOMPurify.sanitize(judgments)}</ReactMarkdown></div><p className="result-disclaimer">Verify every citation and confirm whether a legacy-law judgment remains applicable under the current statute before relying on it.</p></article>}
+      {judgments && <article className="result-card"><div className="result-header"><h2 className="result-title">Relevant Judgments</h2><span className="result-reference">Research return / citation check required</span></div><div className="result-content"><ReactMarkdown components={markdownComponents}>{DOMPurify.sanitize(judgments)}</ReactMarkdown></div><p className="result-disclaimer">Verify every citation and confirm whether a legacy-law judgment remains applicable under the current statute before relying on it.</p></article>}
     </main>
   )
 }

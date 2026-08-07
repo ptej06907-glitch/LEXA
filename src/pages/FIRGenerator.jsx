@@ -14,6 +14,9 @@ import { apiUrl } from '../lib/api'
 
 const CATEGORIES = ['Theft', 'Assault', 'Fraud', 'Cybercrime', 'Harassment', 'Domestic Violence', 'Property Dispute', 'Other']
 const STEPS = ['Incident details', 'What happened', 'Review']
+const markdownComponents = {
+  a: ({ href, children }) => <a href={href} target="_blank" rel="noopener noreferrer">{children}</a>,
+}
 
 export default function FIRGenerator() {
   const [incident, setIncident] = useState('')
@@ -93,7 +96,7 @@ export default function FIRGenerator() {
 
       {error && <div className="alert-error" role="alert" style={{ marginTop: 'var(--space-lg)' }}>{error}</div>}
       {loading && <LoadingState label="Drafting your FIR" detail="Structuring the facts and identifying relevant legal provisions." />}
-      {fir && !loading && <ResultDocument title="FIR Draft" actions={<><Button onClick={handleCopy} variant="ghost"><Copy size={16} /> Copy</Button><Button onClick={handleDownloadPdf} loading={pdfLoading} variant="secondary"><Download size={16} /> PDF</Button></>} disclaimer="AI-generated draft. Review it with a qualified lawyer before filing and replace every blank with accurate information."><ReactMarkdown>{DOMPurify.sanitize(fir)}</ReactMarkdown></ResultDocument>}
+      {fir && !loading && <ResultDocument title="FIR Draft" actions={<><Button onClick={handleCopy} variant="ghost"><Copy size={16} /> Copy</Button><Button onClick={handleDownloadPdf} loading={pdfLoading} variant="secondary"><Download size={16} /> PDF</Button></>} disclaimer="AI-generated draft. Review it with a qualified lawyer before filing and replace every blank with accurate information."><ReactMarkdown components={markdownComponents}>{DOMPurify.sanitize(fir)}</ReactMarkdown></ResultDocument>}
       <Toast message={toast?.message} tone={toast?.tone} onDismiss={() => setToast(null)} />
     </main>
   )

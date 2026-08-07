@@ -29,6 +29,41 @@ The Bharatiya Nyaya Sanhita, 2023 (BNS), Bharatiya Nagarik Suraksha Sanhita, 202
 
 Lexa does not treat old and new section numbers as automatically equivalent. Missing dates, statutory mappings, generated provisions, and case citations must be independently verified before use.
 
+## Source-Grounded Legal Research
+
+Legal Advisor, Document Scanner, FIR Generator, Legal Notice Generator, and Landmark Case Finder use a privacy-conscious retrieval flow before producing an answer or draft:
+
+```text
+User narrative
+  -> local identifier redaction
+  -> versioned local statute retrieval (BNS, BNSS, BSA)
+  -> de-identified live research query
+  -> allowlisted official-source search for updates and judgments
+  -> source validation and bounded hybrid context
+  -> Llama 3.3 70B analysis
+  -> answer with inline references and verified source links
+```
+
+The primary criminal-law retrieval layer is a committed local corpus containing the complete English text extracted from official BNS, BNSS, and BSA PDFs. Each corpus build records the official URL, source date, page count, chunk count, and SHA-256 checksum. Results link back to the relevant page of the official PDF.
+
+The live retrieval allowlist prioritises India Code, the Supreme Court of India and its subdomains, eCourts, selected official High Court domains, central legal departments, and relevant official regulators and public bodies. Search results from non-allowlisted domains are discarded before they reach the answering model. Local statute passages are placed before live excerpts so the model receives primary statutory text first.
+
+The original narrative is not used as the web-search query. Lexa first removes common contact, identity, URL, and financial identifiers and asks a separate model step to produce a generic legal research query. Retrieved web text is treated as untrusted reference material and is length-limited before prompt construction.
+
+If live retrieval fails, relevant BNS, BNSS, and BSA passages remain available from the local corpus. Case Finder still does not generate unsupported case citations from model memory. Other tools avoid unsupported section numbers and visibly label a response when neither local nor live sources support it. Retrieved sources improve verifiability but do not guarantee legal correctness; users must open the links and check the complete statute or judgment.
+
+For longer uploaded documents, Lexa reviews a bounded set of excerpts selected from the beginning, end, and clauses containing higher-risk legal terms. The result explicitly identifies this as a targeted review so it is never presented as a complete reading of omitted text.
+
+The live retrieval layer uses Groq Compound web search with the existing server-side `GROQ_API_KEY`. It requires no additional frontend credential or vector-database service, but search usage can add latency and provider cost.
+
+Rebuild the versioned corpus from its official PDFs with:
+
+```bash
+npm run corpus:build
+```
+
+The ingestion command uses `pdf-parse` as a development-only dependency. Corpus updates should be reviewed whenever India Code or the Ministry of Home Affairs publishes an amended or newer consolidated source. Never update only the displayed version date: regenerate the corpus so its checksum and extracted content stay aligned.
+
 ## Interface Direction
 
 Lexa uses an editorial legal-reference design rather than a generic dashboard. The homepage presents its tools as a numbered service directory grouped into **Understand**, **Prepare**, and **Research**. The design system is built from CSS custom properties and preserves the same typography and restrained gold accent across both themes.
@@ -45,7 +80,7 @@ Lexa uses an editorial legal-reference design rather than a generic dashboard. T
 | Backend | Node.js, Express 5 |
 | Validation | Zod |
 | Security | Helmet, express-rate-limit, DOMPurify, restricted CORS |
-| File processing | Multer, pdfreader, Mammoth |
+| File processing | Multer, pdf-parse, Mammoth |
 | PDF generation | jsPDF |
 | Optional auth scaffold | Supabase OAuth client |
 | Hosting | Vercel frontend, Render backend |
@@ -76,13 +111,24 @@ npm run test:security
 
 It verifies Helmet, CORS, strict validation, request-size limits, file-signature checks, and rate limiting.
 
+Run the retrieval safety checks with:
+
+```bash
+npm run test:research
+```
+
+They verify identifier redaction, trusted-domain enforcement, unsafe-domain rejection, deduplication, bounded context construction, corpus checksums and coverage, representative BNS/BNSS/BSA retrieval, risk-focused long-document selection, and explicit fallback labelling without making a paid search request.
+
 ## Project Structure
 
 ```text
 lexa/
 ├── server/
 │   ├── controllers/          # AI and document-processing handlers
+│   ├── data/legal-corpus/     # Versioned official statutory passages and manifest
 │   ├── routes/               # Validated and rate-limited API routes
+│   ├── scripts/              # Repeatable legal-corpus ingestion
+│   ├── services/             # Local and live guarded retrieval services
 │   ├── index.js              # Express app and security middleware
 │   └── securitySmokeTest.mjs
 ├── src/
